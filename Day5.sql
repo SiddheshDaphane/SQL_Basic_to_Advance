@@ -67,6 +67,141 @@ SELECT o.order_id, o.product_id, r.return_reason, r.order_id as ret
 FROM orders o -- this is the left table
 LEFT JOIN returns r
 ON o.order_id = r.order_id
-WHERE r.order_id IS NULL
+WHERE r.order_id IS NULL 
+
+-- How much sales I lost because of return orders?
+SELECT r.return_reason, SUM(sales) as total_sales
+FROM orders o 
+LEFT JOIN returns r 
+ON o.order_id = r.order_id
+GROUP BY r.return_reason  -- Because of left join, I am also getting "NULL" in my output
+
+SELECT r.return_reason, SUM(sales) as total_sales
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id
+GROUP BY r.return_reason -- I will not get "NULL" in my output.
 
 
+----------------------------- FOR CROSS JOIN ----------------------------------
+
+/* In cross join you will get (number of records in 1 table)*(number of records in another) as number of output.
+*/
+create table employee(
+emp_id int,
+emp_name varchar(20),
+dept_id int,
+salary int,
+manager_id int,
+emp_age int
+);
+
+
+
+
+insert into employee values(1,'Ankit',100,10000,4,39);
+insert into employee values(2,'Mohit',100,15000,5,48);
+insert into employee values(3,'Vikas',100,10000,4,37);
+insert into employee values(4,'Rohit',100,5000,2,16);
+insert into employee values(5,'Mudit',200,12000,6,55);
+insert into employee values(6,'Agam',200,12000,2,14);
+insert into employee values(7,'Sanjay',200,9000,2,13);
+insert into employee values(8,'Ashish',200,5000,2,12);
+insert into employee values(9,'Mukesh',300,6000,6,51);
+insert into employee values(10,'Rakesh',500,7000,6,50);
+select * from employee;
+
+
+
+
+
+
+create table dept(
+dep_id int,
+dep_name varchar(20)
+);
+insert into dept values(100,'Analytics');
+insert into dept values(200,'IT');
+insert into dept values(300,'HR');
+insert into dept values(400,'Text Analytics');
+select * from dept;
+
+
+--- New syntax.
+
+SELECT *
+FROM employee,dept
+ORDER BY employee.emp_id
+
+-- This give same output as above query
+SELECT *
+FROM employee
+INNER JOIN dept
+ON 1=1 -- or you can say 100=100
+ORDER BY employee.emp_id
+
+----------------------------- Important observation
+/*
+There is no 400 dept_id in employee table and there is no 500 dept_id in department table
+*/
+
+SELECT *
+FROM employee,dept
+ORDER BY employee.emp_id --- Cross join so 40 records
+
+
+
+-- This give same output as above query
+SELECT *
+FROM employee
+INNER JOIN dept
+ON 1=1 -- or you can say 100=100
+ORDER BY employee.emp_id ---- Cross join so 40 records
+
+
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dep_name
+FROM employee e
+INNER JOIN dept d
+ON e.dept_id = d.dep_id ----- Inner join so total 9 records
+
+
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dep_name
+FROM employee e
+LEFT JOIN dept d
+ON e.dept_id = d.dep_id ----- Left Join so 10 records
+
+
+SELECT e.emp_id, e.emp_name, e.dept_id, d.dep_name
+FROM employee e
+RIGHT JOIN dept d
+ON e.dept_id = d.dep_id ------ Right join so 10 records and 500 is not present
+
+
+SELECT e.emp_id, e.emp_name, e.dept_id,d.dep_id, d.dep_name
+FROM employee e
+FULL OUTER JOIN dept d
+ON e.dept_id = d.dep_id ------- Full outer join but all records from both tables.
+
+
+
+CREATE TABLE people
+(
+manager VARCHAR(20),
+region VARCHAR(10)
+)
+DROP TABLE people
+INSERT INTO people
+VALUES('Ankit','West')
+,('Deepak','East')
+,('Vishal','Central')
+,('Sanjay','South')
+
+
+SELECT * FROM people
+SELECT * FROM orders
+
+SELECT o.order_id , o.product_id, r.return_reason, p.manager
+FROM orders o
+INNER JOIN returns r ON o.order_id = r.order_id
+INNER JOIN people p ON p.region = o.region
+-- You can also use the returns table if there is the same column. AND the result of first inner join will be inner joined with people table
