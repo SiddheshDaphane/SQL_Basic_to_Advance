@@ -69,3 +69,4 @@ LEFT JOIN returns r
 ON o.order_id = r.order_id
 WHERE r.order_id IS NULL
 
+
