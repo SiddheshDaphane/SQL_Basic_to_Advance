@@ -50,10 +50,10 @@ ON o.order_id = r.order_id -- See the order_id of 1st three rows. order_id is sa
 
 
 -- Not a solution of above question
-SELECT DISTINCT o.*, r.*
+SELECT DISTINCT o.order_id, o.product_id, r.return_reason, r.order_id as return_order_id
 FROM orders o -- This is the left table
 LEFT JOIN returns r
-ON o.order_id = r.order_id
+ON o.order_id = r.order_id  -- 9994 rows because we did left join and also return_reason is NULL and r.order_id is NULL
 
 
 
