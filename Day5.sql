@@ -23,10 +23,9 @@ SELECT * FROM returns
 -- 1) INNER JOIN
 
 SELECT o.order_id, o.order_date, return_reason
-FROM orders o
-INNER JOIN returns r
-ON o.order_id = r.order_id
-
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id 
 
 SELECT DISTINCT o.order_id, o.order_date, return_reason
 FROM orders o
