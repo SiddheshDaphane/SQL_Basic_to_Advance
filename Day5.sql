@@ -70,14 +70,14 @@ SELECT o.order_id, o.product_id, r.return_reason, r.order_id as ret
 FROM orders o -- this is the left table
 LEFT JOIN returns r
 ON o.order_id = r.order_id
-WHERE r.order_id IS NULL 
+WHERE r.order_id IS NULL  -- 9194 records meaning 800 records were joined which were returned.
 
 -- How much sales I lost because of return orders?
 SELECT r.return_reason, SUM(sales) as total_sales
 FROM orders o 
 LEFT JOIN returns r 
 ON o.order_id = r.order_id
-GROUP BY r.return_reason  -- Because of left join, I am also getting "NULL" in my output
+GROUP BY r.return_reason  -- Because of left join, I am also getting "NULL" in my output. NULL means those orders were never returned
 
 SELECT r.return_reason, SUM(sales) as total_sales
 FROM orders o 
@@ -129,17 +129,26 @@ insert into dept values(300,'HR');
 insert into dept values(400,'Text Analytics');
 select * from dept;
 
+SELECT * FROM employee  -- 10 records
+SELECT * FROM dept  --  4 rows
 
 --- New syntax.
 
 SELECT *
 FROM employee,dept
-ORDER BY employee.emp_id
+ORDER BY employee.emp_id  -- 40 reccords. So number of records are 10*4 that is 40. This is a cross join
 
 -- This give same output as above query
 SELECT *
 FROM employee
 INNER JOIN dept
+ON 1=1 -- or you can say 100=100
+ORDER BY employee.emp_id
+
+-- What is a difference between two queries?
+SELECT *
+FROM employee
+LEFT JOIN dept
 ON 1=1 -- or you can say 100=100
 ORDER BY employee.emp_id
 
@@ -165,13 +174,13 @@ ORDER BY employee.emp_id ---- Cross join so 40 records
 SELECT e.emp_id, e.emp_name, e.dept_id, d.dep_name
 FROM employee e
 INNER JOIN dept d
-ON e.dept_id = d.dep_id ----- Inner join so total 9 records
+ON e.dept_id = d.dep_id ----- Inner join so total 9 records. Column names are not same but values should be same
 
 
 SELECT e.emp_id, e.emp_name, e.dept_id, d.dep_name
 FROM employee e
 LEFT JOIN dept d
-ON e.dept_id = d.dep_id ----- Left Join so 10 records
+ON e.dept_id = d.dep_id ----- Left Join so 10 records because it will take every value from employee table
 
 
 SELECT e.emp_id, e.emp_name, e.dept_id, d.dep_name
@@ -183,7 +192,8 @@ ON e.dept_id = d.dep_id ------ Right join so 10 records and 500 is not present
 SELECT e.emp_id, e.emp_name, e.dept_id,d.dep_id, d.dep_name
 FROM employee e
 FULL OUTER JOIN dept d
-ON e.dept_id = d.dep_id ------- Full outer join but all records from both tables.
+ON e.dept_id = d.dep_id ------- Whatever common in left both table will come and also whatever unique in both tables will also come. 11 rows.
+/* FULL OUTER JOIN is very different from UNION because UNION will not join the 
 
 
 
