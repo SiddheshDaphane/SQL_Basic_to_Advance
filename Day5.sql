@@ -25,12 +25,16 @@ SELECT * FROM returns
 SELECT o.order_id, o.order_date, return_reason
 FROM orders o 
 INNER JOIN returns r 
-ON o.order_id = r.order_id 
+ON o.order_id = r.order_id -- 800 rows in the output becuase there are multiple products for each order_id but all records from return table is present here
 
-SELECT DISTINCT o.order_id, o.order_date, return_reason
+SELECT * FROM orders -- 9994 records
+
+SELECT * FROM returns -- 296 records
+
+SELECT DISTINCT o.order_id
 FROM orders o
 INNER JOIN returns r
-ON o.order_id = r.order_id
+ON o.order_id = r.order_id -- 296 rows in the output because we are only joining on DISTINCT order_id and return table has 296 rows
 
 
 SELECT DISTINCT o.*, return_reason
