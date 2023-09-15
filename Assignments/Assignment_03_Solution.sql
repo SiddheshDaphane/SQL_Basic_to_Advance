@@ -138,6 +138,7 @@ INNER JOIN returns r
 ON o.order_id = r.order_id
 WHERE r.return_reason IN ('Wrong Items', 'Bad Quality', 'Others')
 
+/* I completely missed the question. "IN" operator uses "OR," so every sub-category will come. The question is which subcategories have all three kinds of returns.   */
 
 -- Solution
 select o.sub_category
@@ -148,14 +149,49 @@ having count(distinct r.return_reason)=3
 
 -- Q6) write a query to find cities where not even a single order was returned.
 
+-- My Solution
+SELECT city, COUNT(r.order_id) 
+FROM orders o 
+LEFT JOIN returns r 
+ON o.order_id = r.order_id 
+GROUP BY city
+HAVING COUNT(r.order_id) = 0 
+
+/* LEFT JOIN because we want the orders that were not returned, which means those cities in which o.order_id doesn't have r.order_id attached to them. */
+
+-- Solution
+select city
+from orders o
+left join returns r on o.order_id=r.order_id
+group by city
+having count(r.order_id)=0
+
 
 
 -- Q7) write a query to find top 3 subcategories by sales of returned orders in east region
 
+-- My Solution
+SELECT TOP 3 sub_category, SUM(sales) as sales_returned
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id
+WHERE region = 'East' 
+GROUP BY sub_category
+ORDER BY sales_returned DESC
 
+/* INNER JOIN because we only want the sales of returned orders, which means the sales of phones are the highest. */
+
+-- Solution
+select top 3 sub_category,sum(o.sales) as return_sales
+from orders o
+inner join returns r on o.order_id=r.order_id
+where o.region='East'
+group by sub_category
+order by return_sales  desc
 
 -- Q8) write a query to print dep name for which there is no employee
 
+-- My Solution
 
 
 --Q9) write a query to print employees name for dep id is not avaiable in dept table
