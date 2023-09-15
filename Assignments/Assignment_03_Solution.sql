@@ -190,10 +190,49 @@ group by sub_category
 order by return_sales  desc
 
 -- Q8) write a query to print dep name for which there is no employee
+SELECT * from employee
+SELECT * FROM dept
 
 -- My Solution
+SELECT d.dep_name, dep_id
+FROM dept d 
+LEFT JOIN employee e 
+ON d.dep_id = e.dept_id
+WHERE emp_id IS NULL
 
+/* Again, my solution is correct in this case only because it will be correct if dep_id is the primary key. But COUNT() is a generic approach. I used LEFT join because we want
+of all employees so that we can get the department that doesn't have employees.  */
+
+-- Another experiment. Why this is not giving output?
+SELECT d.dep_name, dep_id
+FROM employee e 
+LEFT JOIN dept d  
+ON d.dep_id = e.dept_id
+WHERE e.emp_id IS NULL
+/* In this query, we are getting all the records from the employee table. Now, we want the department that doesn't have employees. When we use LEFT JOIN, we get all the records.
+from the left table, and we get only matched records from another table, and that's why we need to use the first query to get the desired output. */
+
+-- Solution
+select d.dep_id,d.dep_name
+from dept d 
+left join employee e on e.dept_id=d.dep_id
+group by d.dep_id,d.dep_name
+having count(e.emp_id)=0;
 
 --Q9) write a query to print employees name for dep id is not avaiable in dept table
 
+-- My Soluion
+SELECT e.*
+FROM employee e 
+LEFT JOIN dept d 
+ON e.dept_id = d.dep_id
+WHERE d.dep_id IS NULL
 
+/* We use LEFT JOIN because we need the value from the employee table, which is the left table and has no match in the department table. Meaning we want those records from the left table.
+which will not get attached to another table in the given column. */
+
+-- Solution
+select e.*
+from employee e 
+left join dept d  on e.dept_id=d.dep_id
+where d.dep_id is null;
