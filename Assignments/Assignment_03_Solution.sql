@@ -129,7 +129,22 @@ having count(e.emp_id)=count(distinct e.salary)
 
 -- Q5) write a query to print sub categories where we have all 3 kinds of returns (others,bad quality,wrong items)
 
+select * from orders
+select * from returns
+-- My Solution
+SELECT sub_category
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id
+WHERE r.return_reason IN ('Wrong Items', 'Bad Quality', 'Others')
 
+
+-- Solution
+select o.sub_category
+from orders o
+inner join returns r on o.order_id=r.order_id
+group by o.sub_category
+having count(distinct r.return_reason)=3
 
 -- Q6) write a query to find cities where not even a single order was returned.
 
