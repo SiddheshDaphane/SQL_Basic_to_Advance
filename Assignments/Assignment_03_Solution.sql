@@ -28,6 +28,21 @@ ON o.order_id = r.order_id
 WHERE r.return_reason IS NULL 
 GROUP BY category
 
+-- Why not this solution? I used INNER JOIN and not LEFT JOIN. I am geeting nothing in my output. why? Answer....
+/* When we use INNER JOIN then the common records from both tables get attached and in the out those will come.
+Here we want the records that were not returned meaning which doesn't have return_id. 
+If order doesn't have return_id means that order has not returned. But in the returns table, all the orders that were returned are stored.
+To check if order is not returned, we need returned_id = 0 to some order_id and that's why we are using LEFT JOIN
+
+Now my solution is not wrong but not 100% correct. Because an order which was returned may not have return_reason. On this records it is giving me correct solution but not 100% coorect query. 
+*/
+SELECT category, SUM(o.sales)
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id
+WHERE r.return_reason IS NULL 
+GROUP BY category
+
 -- Solution
 select category,sum(o.sales) as total_sales
 from orders o
