@@ -1,4 +1,9 @@
--- Q1) Solution
+-- Q1) Write one query to show org structure with employee name indented by spaces based on level, 
+-- show department, employee salary, and employee’s department salary average and sum. Sort rows by 
+-- id path to CEO.
+
+
+-- Solution
 
 WITH RECURSIVE EHierarchy AS (
 
@@ -89,7 +94,11 @@ ORDER BY
 
 
 
--- Q2) Solution
+-- Q2) Write one query to pivot the data to display the count of electric vehicles by models and model 
+-- years for all 5 Tesla models. The result should have models as columns, model years as rows, 
+-- and the count of vehicles as values. Show ‘All’ top row with totals, and a ‘Tesla’ left column with totals.
+
+-- Solution
 
 CREATE TABLE vehicle (
 VIN_1_10 VARCHAR(300),
