@@ -6,6 +6,7 @@ There are 2 tables, the first table has 5 records and the second table has 10 re
 You can assume any values in each of the tables. How many maximum and minimum records possible
 in case of inner join, left join, right join and full outer join?
 */
+
 CREATE TABLE t1
 (
 col_1 INT
@@ -40,6 +41,8 @@ INSERT INTO t2 VALUES (1)
 SELECT * from t2
 
 
+-- Inner join 
+
 SELECT COUNT(*) as max_count FROM t1
 INNER JOIN t2 ON t1.col_1=t2.col_1
 
@@ -50,6 +53,8 @@ LEFT JOIN t2 ON t1.col_1=t2.col_1
 
 SELECT COUNT(*) as max_count FROM t1
 RIGHT JOIN t2 ON t1.col_1=t2.col_1
+
+
 SELECT COUNT(*) as max_count FROM t1
 FULL OUTER JOIN t2 ON t1.col_1=t2.col_1
 
@@ -84,5 +89,8 @@ LEFT JOIN t3 ON t1.col_1=t3.col_1
 
 SELECT COUNT(*) as max_count FROM t1
 RIGHT JOIN t3 ON t1.col_1=t3.col_1
+
+
 SELECT COUNT(*) as max_count FROM t1
 FULL OUTER JOIN t3 ON t1.col_1=t3.col_1
+
