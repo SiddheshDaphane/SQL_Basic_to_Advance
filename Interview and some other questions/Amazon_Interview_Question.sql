@@ -7,6 +7,11 @@ You can assume any values in each of the tables. How many maximum and minimum re
 in case of inner join, left join, right join and full outer join?
 */
 
+
+/* 
+   We want maximum and minumum output. We can get a maximun output when all the records of both tables are same meaning records from both tables
+   can join on each other which we get the maximum output. That's why in the first query we are getting output 50 or count 50.
+  */
 CREATE TABLE t1
 (
 col_1 INT
@@ -59,6 +64,11 @@ SELECT COUNT(*) as max_count FROM t1
 FULL OUTER JOIN t2 ON t1.col_1=t2.col_1
 
 
+
+/*  
+   We want minimum output which we can get if records from both tables are different which means no records can join on each other. That means,
+   it will give us minimum output which will be zero (0). 
+   */
 
 
 CREATE TABLE t3
