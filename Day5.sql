@@ -193,7 +193,9 @@ SELECT e.emp_id, e.emp_name, e.dept_id,d.dep_id, d.dep_name
 FROM employee e
 FULL OUTER JOIN dept d
 ON e.dept_id = d.dep_id ------- Whatever common in left both table will come and also whatever unique in both tables will also come. 11 rows.
-/* FULL OUTER JOIN is very different from UNION because UNION will not join the 
+
+/* FULL OUTER JOIN is very different from UNION ALL because UNION ALL will not join the records from both tables even though they have common joining ID and 
+if you take a COUNT of that query, then in this case it will be 14 but count of FULL OUTER JOIN is 11 */
 
 
 
