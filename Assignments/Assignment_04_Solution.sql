@@ -107,3 +107,51 @@ left join returns r on o.order_id=r.order_id
 group by category
 
 
+-- Q7) write a query to print below 3 columns
+-- category, total_sales_2019(sales in year 2019), total_sales_2020(sales in year 2020)
+
+-- My Solution
+SELECT o.category, 
+SUM(CASE WHEN DATEPART(year,order_date) = 2019 THEN o.sales END) AS total_sales_2019,
+SUM(CASE WHEN DATEPART(year,order_date) = 2020 THEN o.sales END) AS total_sales_2020
+FROM orders o 
+GROUP BY o.category
+
+-- Solution
+select category,sum(case when datepart(year,order_date)=2019 then sales end) as total_sales_2019
+,sum(case when datepart(year,order_date)=2020 then sales end) as total_sales_2020
+from orders 
+group by category
+
+-- Q8) write a query print top 5 cities in west region by average no of days between order date and ship date.
+
+-- My Solution
+SELECT TOP 5 city, AVG(DATEDIFF(day, order_date, ship_date)) as abc
+FROM orders
+WHERE region = 'West'
+GROUP BY city
+ORDER BY abc DESC
+
+-- SOlution
+select top 5 city, avg(datediff(day,order_date,ship_date) ) as avg_days
+from orders
+where region='West'
+group by city
+order by avg_days desc
+
+
+-- Q9) write a query to print emp name, manager name and senior manager name (senior manager is manager's manager)
+
+-- My Solution
+SELECT e1.emp_name, e2.emp_name AS manager_name, e3.emp_name AS senior_manager
+FROM employee e1
+JOIN employee e2
+ON e1.manager_id = e2.emp_id
+JOIN employee e3
+ON e2.manager_id = e3.emp_id
+
+-- Solution
+select e1.emp_name,e2.emp_name as manager_name,e3.emp_name as senior_manager_name
+from employee e1
+inner join employee e2 on e1.manager_id=e2.emp_id
+inner join employee e3 on e2.manager_id=e3.emp_id
