@@ -70,6 +70,8 @@ JOIN employee e2
 ON e1.manager_id = e2.emp_id
 GROUP BY e2.emp_name
 
+/* STRING_AGG function is very useful when you want to aggregate strings. */
+
 -- Solution
 select e2.emp_name as manager_name , string_agg(e1.emp_name,',') as emp_list
 from employee e1
@@ -82,6 +84,8 @@ group by e2.emp_name
 -- My Solution
 SELECT order_id, order_date, ship_date, DATEDIFF(day, order_date, ship_date) - 2*DATEDIFF(week, order_date,ship_date) AS business_days
 FROM orders 
+
+/* "2*DATEDIFF(week, order_date,ship_date)" this logic is very IMP here beacuse we want to exclude the weekend. */ 
 
 -- Solution
 select order_id,order_date,ship_date ,datediff(day,order_date,ship_date)-2*datediff(week,order_date,ship_date) as no_of_business_days
@@ -98,6 +102,8 @@ FROM orders o
 LEFT JOIN returns r 
 ON o.order_id = r.order_id 
 GROUP BY o.category
+
+/* Because we want total sales of returned order and total sales of orders, we use LEFT JOIN. */ 
 
 -- Solution
 select o.category,sum(o.sales) as total_sales
@@ -117,6 +123,9 @@ SUM(CASE WHEN DATEPART(year,order_date) = 2020 THEN o.sales END) AS total_sales_
 FROM orders o 
 GROUP BY o.category
 
+/* Whenever you want to include a column according to some filter or condition, the CASE WHEN statement is the only way because you cannot give two different conditions in
+WHERE clause to two different columns, meaning the WHERE clause filter will apply to all the columns that we selected. */ 
+
 -- Solution
 select category,sum(case when datepart(year,order_date)=2019 then sales end) as total_sales_2019
 ,sum(case when datepart(year,order_date)=2020 then sales end) as total_sales_2020
@@ -131,6 +140,8 @@ FROM orders
 WHERE region = 'West'
 GROUP BY city
 ORDER BY abc DESC
+
+/* First, check whether your query or logic is satisfying all the conditions or not. It is very important because it can change your way of thinking and your logic. */
 
 -- SOlution
 select top 5 city, avg(datediff(day,order_date,ship_date) ) as avg_days
@@ -149,6 +160,11 @@ JOIN employee e2
 ON e1.manager_id = e2.emp_id
 JOIN employee e3
 ON e2.manager_id = e3.emp_id
+
+/* Just look at the JOIN condition, which is very IMP in the self-join case, because that will change the output. We want managers of employees and managers of those managers, and that is why
+we joined manager_id of the left table to emp_id of the right table (in bith cases).
+*/ 
+
 
 -- Solution
 select e1.emp_name,e2.emp_name as manager_name,e3.emp_name as senior_manager_name
