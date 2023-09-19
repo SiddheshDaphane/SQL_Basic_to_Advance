@@ -58,4 +58,52 @@ HAVING COUNT(1) = 1
 select order_id
 from orders 
 group by order_id
-having count(1)=1
+having count(1)=1 
+
+-- Q4)  write a query to print manager names along with the comma separated 
+--list(order by emp salary) of all employees directly reporting to him.
+
+-- My Solution
+SELECT e2.emp_name AS manager_name  ,STRING_AGG(e1.emp_name, ',') WITHIN GROUP (ORDER BY e1.salary) AS list_of_employees
+FROM employee e1
+JOIN employee e2 
+ON e1.manager_id = e2.emp_id
+GROUP BY e2.emp_name
+
+-- Solution
+select e2.emp_name as manager_name , string_agg(e1.emp_name,',') as emp_list
+from employee e1
+inner join employee e2 on e1.manager_id=e2.emp_id
+group by e2.emp_name 
+
+-- Q5) write a query to get number of business days between order_date and ship_date (exclude weekends). 
+-- Assume that all order date and ship date are on weekdays only
+
+-- My Solution
+SELECT order_id, order_date, ship_date, DATEDIFF(day, order_date, ship_date) - 2*DATEDIFF(week, order_date,ship_date) AS business_days
+FROM orders 
+
+-- Solution
+select order_id,order_date,ship_date ,datediff(day,order_date,ship_date)-2*datediff(week,order_date,ship_date) as no_of_business_days
+from orders
+
+-- Q6) write a query to print 3 columns : category, total_sales and (total sales of returned orders)
+
+select * from orders
+
+-- My Solution
+SELECT o.category, SUM(sales) as total_sales,
+SUM(CASE WHEN r.order_id IS NOT NULL THEN o.sales END) AS total_sales_of_returned_orders
+FROM orders o 
+LEFT JOIN returns r 
+ON o.order_id = r.order_id 
+GROUP BY o.category
+
+-- Solution
+select o.category,sum(o.sales) as total_sales
+,sum(case when r.order_id is not null then sales end) as return_orders_sales
+from orders o
+left join returns r on o.order_id=r.order_id
+group by category
+
+
