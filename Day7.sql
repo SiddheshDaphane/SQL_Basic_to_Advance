@@ -113,3 +113,16 @@ WHERE city IS NULL
 
 
 
+-------------------------------- CAST and ROUND Function ---------------------------------
+SELECT top 5 order_id, sales,
+CAST(sales as INT) AS sales_int,
+ROUND(sales,1) AS rounded_value
+FROM orders  
+
+
+
+
+
+
+
+
