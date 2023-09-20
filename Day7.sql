@@ -91,3 +91,25 @@ FROM orders
 
 SELECT order_id, customer_name
 FROM orders 
+
+
+------------------------------------ NULL HANDLING FUNCTIONS --------------------------
+
+SELECT order_id, city 
+FROM orders 
+WHERE city IS NULL 
+
+-- ISNULL function --> replace the null value with what you gave
+SELECT order_id, city,
+ISNULL(city,'unknown') AS new_city 
+FROM orders 
+WHERE city IS NULL 
+
+-- COALESCE ------> Can take multiple values and it takes first not null values
+SELECT order_id, city, state, 
+COALESCE(city,state,region,'unknown') AS new_city -- If city is null, it will take State value, if state is NULL, it will take region value and if everything is null then it will take unknown value that we gave
+FROM orders 
+WHERE city IS NULL 
+
+
+
