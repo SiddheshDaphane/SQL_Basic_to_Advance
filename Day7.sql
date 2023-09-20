@@ -202,11 +202,11 @@ INTERSECT
 SELECT *, NULL FROM order_east
 
 
-
 -- UNION ALL ------> Gives all the values
 -- UNION ----------> Removes the duplicates and then gives the output
 -- INTERSECT ------> Gives common records only. (This also removes the duplicates)
 -- EXCEPT ---------> Give the record which are not common in both tables
+
 
 /* Only UNION ALL will give duplicates and all other will remove the dublicates */
 
