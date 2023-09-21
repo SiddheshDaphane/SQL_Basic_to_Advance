@@ -120,3 +120,64 @@ charecter by charecter, and hence we have to depend on the LEN function.  */
 -- Solution
 select customer_name , len(customer_name)-len(replace(lower(customer_name),'n','')) as count_of_occurence_of_n
 from orders
+
+
+/* 5-write a query to print below output from orders data. example output
+hierarchy type,hierarchy name ,total_sales_in_west_region,total_sales_in_east_region
+category , Technology, ,
+category, Furniture, ,
+category, Office Supplies, ,
+sub_category, Art , ,
+sub_category, Furnishings, ,
+and so on all the category ,subcategory and ship_mode hierarchies */
+
+select * from orders
+
+/* So basially, we want to group by column name 'Category' and values in category and also group by
+'Sub-category' and values in it. 
+Question is how can I make a column name get attached to every row of it's value?
+I */
+
+-- My Solution
+SELECT 
+'category' AS hierarchy_type, category as hierarchy_name,
+SUM(CASE WHEN region='West' THEN sales END) as total_sales_in_west_region,
+SUM(CASE WHEN region='East' THEN sales END) as total_sales_in_east_region
+FROM orders 
+GROUP BY category 
+UNION ALL 
+SELECT 
+'sub_category', sub_category,
+SUM(CASE WHEN region='West' THEN sales END) as total_sales_in_west_region,
+SUM(CASE WHEN region='East' THEN sales END) as total_sales_in_east_region
+FROM orders 
+GROUP BY sub_category
+UNION ALL 
+SELECT 
+'ship_mode', ship_mode,
+SUM(CASE WHEN region='West' THEN sales END) as total_sales_in_west_region,
+SUM(CASE WHEN region='East' THEN sales END) as total_sales_in_east_region
+FROM orders 
+GROUP BY ship_mode
+
+-- Solution
+select 
+'category' as hierarchy_type,category as hierarchy_name
+,sum(case when region='West' then sales end) as total_sales_in_west_region
+,sum(case when region='East' then sales end) as total_sales_in_east_region
+from orders
+group by category
+union all
+select 
+'sub_category',sub_category
+,sum(case when region='West' then sales end) as total_sales_in_west_region
+,sum(case when region='East' then sales end) as total_sales_in_east_region
+from orders
+group by sub_category
+union all
+select 
+'ship_mode ',ship_mode 
+,sum(case when region='West' then sales end) as total_sales_in_west_region
+,sum(case when region='East' then sales end) as total_sales_in_east_region
+from orders
+group by ship_mode 
