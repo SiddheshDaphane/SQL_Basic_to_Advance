@@ -181,3 +181,19 @@ select
 ,sum(case when region='East' then sales end) as total_sales_in_east_region
 from orders
 group by ship_mode 
+
+-- Q6) the first 2 characters of order_id represents the country of order placed . 
+-- write a query to print total no of orders placed in each country
+-- (an order can have 2 rows in the data when more than 1 item was purchased in the order but it should be considered as 1 order)
+
+select * from orders
+
+-- My Solution
+SELECT TRIM(SUBSTRING(order_id, 1, 2)) AS country_of_order, COUNT(DISTINCT order_id)
+FROM orders 
+GROUP BY TRIM(SUBSTRING(order_id, 1, 2))
+
+-- Solution
+select left(order_id,2) as country, count(distinct order_id) as total_orders
+from orders 
+group by left(order_id,2)
