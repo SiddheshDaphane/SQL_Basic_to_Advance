@@ -44,4 +44,18 @@ from all_teams
 
 
 
+-- Q2) write a query to print first name and last name of a customer using orders table(everything after first space can be considered as last name)
+-- customer_name, first_name,last_name
+
+-- My Solution
+SELECT
+customer_name,
+TRIM(SUBSTRING(customer_name,1,CHARINDEX(' ', customer_name))) AS first_name,
+SUBSTRING(customer_name,CHARINDEX(' ', customer_name)+1,LEN(customer_name)-CHARINDEX(' ', customer_name)+1) AS last_name 
+FROM orders 
+
+-- Solution
+select customer_name , trim(SUBSTRING(customer_name,1,CHARINDEX(' ',customer_name))) as first_name
+, SUBSTRING(customer_name,CHARINDEX(' ',customer_name)+1,len(customer_name)-CHARINDEX(' ',customer_name)+1) as second_name
+from orders
 
