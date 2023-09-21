@@ -103,3 +103,20 @@ from rides r1
 left join rides r2
 on r1.id=r2.id and r1.end_loc=r2.start_loc and r1.rn+1=r2.rn
 group by r1.id
+
+-- Q4) write a query to print customer name and no of occurence of character 'n' in the customer name.
+-- customer_name , count_of_occurence_of_n
+
+-- My Solution
+SELECT customer_name,
+LEN(customer_name) - LEN(REPLACE(LOWER(customer_name),'n','')) AS count_of_occurance_of_n
+FROM orders
+GROUP BY customer_name
+
+/* This logic is very different from Python. In Python, we can break the characters of a name, and then we can find 'n'
+in that name, which means Python can traverse charecter by charecter, but in SQL, this is not the case. SQL cannot traverse 
+charecter by charecter, and hence we have to depend on the LEN function.  */
+
+-- Solution
+select customer_name , len(customer_name)-len(replace(lower(customer_name),'n','')) as count_of_occurence_of_n
+from orders
