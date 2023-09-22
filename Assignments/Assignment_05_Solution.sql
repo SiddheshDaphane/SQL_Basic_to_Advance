@@ -51,10 +51,6 @@ Here we can learn when we can use UNION, UNION ALL. This is a very good example.
  */
 
 
-
-
-
-
 -- Solution
 with all_teams as 
 (select Team_1 as team, case when Team_1=Winner then 1 else 0 end as win_flag from icc_world_cup
