@@ -15,23 +15,45 @@ SELECT * FROM icc_world_cup
 -- Q1) write a query to produce below output from icc_world_cup table.
 -- team_name, no_of_matches_played , no_of_wins , no_of_losses
 
--- My Solution (Cannot able to solve this question)
+-- My Solution (Not able to solve this question). This question needs an sub-query or CTE. But let's decode the logic of UNION and UNION ALL meaning when to use it (line 36). 
 
-    (SELECT i1.Team_1 AS team_name,
-    CASE WHEN i1.Team_1 = i2.Winner THEN 1 ELSE 0 END AS win 
-    FROM icc_world_cup i1
-    LEFT JOIN icc_world_cup i2 
-    ON i1.Winner = i2.Team_1 
-    GROUP BY i1.Team_1, i2.Winner) 
-    UNION ALL 
-    (SELECT i1.Team_2 AS team_name,
-    CASE WHEN i1.Team_2 = i2.Winner THEN 1 ELSE 0 END AS win 
-    FROM icc_world_cup i1
-    LEFT JOIN icc_world_cup i2 
-    ON i1.Winner = i2.Team_2
-    GROUP BY i1.Team_2, i2.Winner) 
+(SELECT i1.Team_1 AS team_name,
+CASE WHEN i1.Team_1 = i2.Winner THEN 1 ELSE 0 END AS win 
+FROM icc_world_cup i1
+LEFT JOIN icc_world_cup i2 
+ON i1.Winner = i2.Team_1 
+GROUP BY i1.Team_1, i2.Winner) 
+UNION ALL 
+(SELECT i1.Team_2 AS team_name,
+CASE WHEN i1.Team_2 = i2.Winner THEN 1 ELSE 0 END AS win 
+FROM icc_world_cup i1
+LEFT JOIN icc_world_cup i2 
+ON i1.Winner = i2.Team_2
+GROUP BY i1.Team_2, i2.Winner) 
 
-/* Need to look at this question again. Once I learned about sub-queries and CTEs then I will solve this question */
+/* Need to look at this question again. Once I learned about sub-queries and CTEs then I will solve this question
+
+Explanation:-  If you look at the output ot table then we have 3 columns, that is, Team_1, Team_2, Winner. Now we want the following output (taking e.g. of India from tabel)
+
+                team_name           no_of_matches_palyed         no_of_wins          no_of_losses
+                India                       2                         2                    0            
+
+Now, if we look at the table, we can see that India is present in Team_1 and Team_2 columns. Another observation is that, some teams are in Team_1 column and some teams are in Team_2
+which basically means that we have to take teams from both the columns. Now there are two options to do that 
+
+1) Using SELF-JOIN. So basically we use join condition on a table and join it on it-self but on Team_1 and Winner. When we run this condition, we can say that, from table 1, we can
+have winner team from column 1 i.e. Team_1 and from table 2nd we can have winner from column 2 i.e. Team_2. 
+After this we can use UNION ALL to get all the teams but then the question comes how to use GROUP BY clause on both these query and for that we need CTE or WINDOW function. 
+
+2) Using UNION ALL. As you can see the solution, we can use CASE WHEN function and UNION ALL to get the output but we have to use CTE to GROUP BY teams. There is other way around.
+
+Here we can learn when we can use UNION, UNION ALL. This is a very good example. 
+ */
+
+
+
+
+
 
 -- Solution
 with all_teams as 
