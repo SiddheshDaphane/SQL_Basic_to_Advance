@@ -99,6 +99,11 @@ LEFT JOIN drivers d2
 ON d1.id = d2.id AND d1.end_loc = d2.start_loc AND d1.end_time=d2.start_time
 GROUP BY d1.id
 
+                                                                SELECT d1.*, d2.* -- In above query, we did COUNT(d2.id) because COUNT() function doesn't count NULL and that's why we got that output. 
+                                                                FROM drivers d1 
+                                                                LEFT JOIN drivers d2 
+                                                                ON d1.id = d2.id AND d1.end_loc = d2.start_loc AND d1.end_time=d2.start_time
+
 /* Here join condition is very important. If we miss the last condition that is "d1.end_time=d2.start_time" then it will be wrong answer. We will get an answer but it will be 
 wrong and let me explain that.
                             1   dri_1	09:00:00	09:30:00	a	b
@@ -114,6 +119,15 @@ but that will not be a profitable ride because of time difference. This conditio
 ending time and starting time must be same for profitable ride. 
 This question doesn't need CTE or WINDOW function to solve. JOINS are enough. 
                                        */
+
+
+--  Another Solution (but not optimal onn performance side becasue WHERE clause go row by row)
+SELECT d1.*, d2.*
+FROM drivers d1 
+INNER JOIN drivers d2 
+ON d1.id = d2.id
+WHERE d1.end_loc = d2.start_loc AND d1.end_time=d2.start_time
+
 -- Solution
 --lead function window
 select id, count(1) as total_rides
