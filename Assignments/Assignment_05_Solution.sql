@@ -96,12 +96,24 @@ SELECT * FROM drivers
 SELECT d1.id, COUNT(d1.id), COUNT(d2.id)
 FROM drivers d1 
 LEFT JOIN drivers d2 
-ON d1.id = d2.id AND d1.end_loc = d2.start_loc
+ON d1.id = d2.id AND d1.end_loc = d2.start_loc AND d1.end_time=d2.start_time
 GROUP BY d1.id
 
-/* I want to try to solve this question without using window fucntion because I have not learned any window functions till now
-but I think it is not possible to solve this question. Regardless, I have given a solution which uses window fucntion. */
+/* Here join condition is very important. If we miss the last condition that is "d1.end_time=d2.start_time" then it will be wrong answer. We will get an answer but it will be 
+wrong and let me explain that.
+                            1   dri_1	09:00:00	09:30:00	a	b
+                            2   dri_1	09:30:00	10:30:00	b	c
+                            3   dri_1	11:00:00	11:30:00	d	e
+                            4   dri_1	12:00:00	12:30:00	f	g
+                            5   dri_1	13:30:00	14:30:00	c	h
+                            6   dri_2	12:15:00	12:30:00	f	g
+                            7   dri_2	13:30:00	14:30:00	c	h
 
+If we join on the condition "ON d1.id = d2.id AND d1.end_loc = d2.start_loc", then 2nd row which has ending location as 'C' will get join with 5th row because the start location is 'c'
+but that will not be a profitable ride because of time difference. This condition will give 2 profitable rides for dri_1 but there is only 1 profitable ride and that's why 
+ending time and starting time must be same for profitable ride. 
+This question doesn't need CTE or WINDOW function to solve. JOINS are enough. 
+                                       */
 -- Solution
 --lead function window
 select id, count(1) as total_rides
