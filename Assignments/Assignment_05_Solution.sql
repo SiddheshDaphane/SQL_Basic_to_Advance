@@ -204,6 +204,12 @@ SUM(CASE WHEN region='East' THEN sales END) as total_sales_in_east_region
 FROM orders 
 GROUP BY ship_mode
 
+/* So basically we want extra rows meaning we want 'category' 1st in 'n' rows then 'sub_category' form 'n+1' rows
+meaning we want to join vertically (by row) and not horizontally (column) and that's why we use UNION because it joins
+the data vertically.
+The column names will come from 1st query. Look at the query, I am giving column name in sub_category and ship_mode query. */
+
+
 -- Solution
 select 
 'category' as hierarchy_type,category as hierarchy_name
@@ -240,4 +246,4 @@ GROUP BY TRIM(SUBSTRING(order_id, 1, 2))
 -- Solution
 select left(order_id,2) as country, count(distinct order_id) as total_orders
 from orders 
-group by left(order_id,2)
+group by left(order_id,2) 
