@@ -31,6 +31,8 @@ LEFT JOIN icc_world_cup i2
 ON i1.Winner = i2.Team_2
 GROUP BY i1.Team_2, i2.Winner) 
 
+
+
 /* Need to look at this question again. Once I learned about sub-queries and CTEs then I will solve this question
 
 Explanation:-  If you look at the output ot table then we have 3 columns, that is, Team_1, Team_2, Winner. Now we want the following output (taking e.g. of India from tabel)
@@ -51,14 +53,25 @@ Here we can learn when we can use UNION, UNION ALL. This is a very good example.
  */
 
 
--- Solution
-with all_teams as 
+-- Solution using CTE
+/*  */
+with  all_teams as 
 (select Team_1 as team, case when Team_1=Winner then 1 else 0 end as win_flag from icc_world_cup
 union all
 select Team_2 as team, case when Team_2=Winner then 1 else 0 end as win_flag from icc_world_cup)
 
 select team,count(1) as total_matches_played , sum(win_flag) as matches_won,count(1)-sum(win_flag) as matches_lost
-from all_teams
+from all_teams; 
+
+-- Solution using view
+CREATE VIEW team_vw AS
+select Team_1 as team, case when Team_1=Winner then 1 else 0 end as win_flag from icc_world_cup
+union all
+select Team_2 as team, case when Team_2=Winner then 1 else 0 end as win_flag from icc_world_cup; 
+
+SELECT team, COUNT(*) as total_matches_played, SUM(win_flag) as match_won, COUNT(*) - SUM(win_flag) AS match_lost
+FROM team_vw 
+GROUP BY team 
 
 
 
