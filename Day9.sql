@@ -52,7 +52,8 @@ FROM orders
 GROUP BY order_id) AS orders_aggregated; 
 
 
--- Find order with sales more than avg order value
+-- Find order with sales more than avg order value 
+
 SELECT order_id 
 FROM orders 
 GROUP BY order_id 
@@ -61,3 +62,27 @@ FROM
 (SELECT order_id, SUM(sales) as order_sales
 FROM orders 
 GROUP BY order_id) AS orders_aggregated); 
+
+
+/*  Look at this query very careful. There are three queries. Let's decode one by one starting from backwords. 
+
+1) SELECT order_id, SUM(sales) as order_sales
+   FROM orders 
+   GROUP BY order_id) AS orders_aggregated  --------> This query gives SUM of sales grouped by order_id. 
+   
+2) (SELECT AVG(order_sales) AS avg_order_value
+    FROM
+        (SELECT order_id, SUM(sales) as order_sales
+        FROM orders 
+        GROUP BY order_id) AS orders_aggregated);  ---------> This query gives the correct AVG of the sales.
+        
+3)  SELECT order_id 
+    FROM orders 
+    GROUP BY order_id 
+    HAVING SUM(sales) > (SELECT AVG(order_sales) AS avg_order_value
+        FROM
+            (SELECT order_id, SUM(sales) as order_sales
+            FROM orders 
+            GROUP BY order_id) AS orders_aggregated); -----------> This is selecting order_id from orders table which is group by order_id, but why?
+If you look at the sub-queries, it is grouped by order_id which means whatever result or output sub-query will give, it will be in grouped format. Now when you are using 
+GROUP BY in a query, it means you are using aggregate function. Which means you have numercial output which means, we have to use HAVING and not WHERE clause. */
