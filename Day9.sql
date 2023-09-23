@@ -3,6 +3,11 @@
 SELECT AVG(sales) 
 FROM orders;
 
+
+(SELECT order_id, SUM(sales) as order_sales
+FROM orders 
+GROUP BY order_id) AS orders_aggregated; 
+
 /* If you look at the orders table, then you can find that it has multiple rows with the same order_id.
 Let's break it down. 
 
@@ -17,16 +22,29 @@ Basically, we have calculate distinct order_id and take their sums and then divi
 distinct and group by clause, GROUP BY will group according to order_id but how can we add them and take their count to divide for AVG? There is no option but to write different queries
 to get the correct AVG values. So basically, I want an intermidiate result which hold the data on which I can get the correct output. There is no way for me to get correct value of 
 AVG i.e. 900 from a single query. 
-
-  */
-
+Now, to get correct AVG, first we need to GROUP BY 'order_id' and take SUM of it. Why? Becasue we to divide SUM by COUNT. So the query is,
 
 (SELECT order_id, SUM(sales) as order_sales
 FROM orders 
 GROUP BY order_id) AS orders_aggregated; 
 
+Now, we can take the AVG of order_sales becasue order_sales has an SUM of a order_id, GROUP BY order_id. 
 
--- Find avg order value
+So final solution will be to take the AVG of above query. The query is,
+
+                SELECT AVG(order_sales) AS avg_order_value
+                FROM
+                (SELECT order_id, SUM(sales) as order_sales
+                FROM orders 
+                GROUP BY order_id) AS orders_aggregated; 
+
+    This query will give us the actual AVG.
+
+  */
+
+
+
+-- Find the correct avg order value
 SELECT AVG(order_sales) AS avg_order_value
 FROM
 (SELECT order_id, SUM(sales) as order_sales
