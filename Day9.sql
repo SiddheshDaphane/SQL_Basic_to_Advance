@@ -45,7 +45,7 @@ So final solution will be to take the AVG of above query. The query is,
 
 
 -- Find the correct avg order value
-SELECT AVG(order_sales) AS avg_order_value
+SELECT AVG(order_sales) AS avg_order_value -- AVG(order_sales) than AVG(sales) because we alliased it as a order_sales in FROM sub-query. 
 FROM
 (SELECT order_id, SUM(sales) as order_sales
 FROM orders 
