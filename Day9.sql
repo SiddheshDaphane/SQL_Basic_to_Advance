@@ -95,3 +95,9 @@ select order_id, SUM(sales) from orders where order_id = 'CA-2020-107328' GROUP 
 
 
 
+
+select * from employee
+select *  from dept 
+delete from dept where dep_id = 500 
+
+
