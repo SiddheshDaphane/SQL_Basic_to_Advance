@@ -40,6 +40,9 @@ So final solution will be to take the AVG of above query. The query is,
 
     This query will give us the actual AVG.
 
+Remember, When you sub-query in FROM statement, then you have to use allisae but if you are using sub-query in a condition meaning in WHERE or HAVING clause, then you don't have to 
+use aalisae.
+
   */
 
 
@@ -85,7 +88,10 @@ GROUP BY order_id) AS orders_aggregated);
             FROM orders 
             GROUP BY order_id) AS orders_aggregated); -----------> This is selecting order_id from orders table which is group by order_id, but why?
 If you look at the sub-queries, it is grouped by order_id which means whatever result or output sub-query will give, it will be in grouped format. Now when you are using 
-GROUP BY in a query, it means you are using aggregate function. Which means you have numercial output which means, we have to use HAVING and not WHERE clause. */
+GROUP BY in a query, it means you are using aggregate function. Which means you have numercial output which means, we have to use HAVING and not WHERE clause. 
+allisae */
+-- Let's verify above query. 
+select order_id, SUM(sales) from orders where order_id = 'CA-2020-107328' GROUP BY order_id
 
 
--- 
+
