@@ -16,7 +16,7 @@ INSERT INTO returns
 SELECT * FROM returns_backup
 
 
-SELECT * FROM returns
+SELECT * FROM returns 
 
 ---------------------------------- JOINS -----------------------------------------
 
