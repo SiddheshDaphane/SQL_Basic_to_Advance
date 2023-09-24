@@ -28,4 +28,4 @@ Key Features:
 
 **Real-World Projects**: Engaging in real-world projects to apply acquired knowledge and reinforce skills, providing a hands-on learning experience.
 
-"SQL Mastery: From Fundamentals to Advanced Techniques" aims to equip learners with the expertise needed to work confidently with databases, making them proficient in SQL and ready to tackle complex data management challenges in various professional settings.
+**"SQL Mastery: From Fundamentals to Advanced Techniques"** aims to equip learners with the expertise needed to work confidently with databases, making them proficient in SQL and ready to tackle complex data management challenges in various professional settings.
