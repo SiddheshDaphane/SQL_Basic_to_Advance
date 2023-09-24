@@ -29,3 +29,7 @@ Key Features:
 **Real-World Projects**: Engaging in real-world projects to apply acquired knowledge and reinforce skills, providing a hands-on learning experience.
 
 **"SQL Mastery: From Fundamentals to Advanced Techniques"** aims to equip learners with the expertise needed to work confidently with databases, making them proficient in SQL and ready to tackle complex data management challenges in various professional settings.
+
+## Dataset 
+It is crucial to have clean data when studying SQL, which is why I have included a download link for the clean data. Download the raw file from the GitHub link I've provided, then export it as a CSV file. 
+[Click here to get the Dataset](https://github.com/SiddheshDaphane/SQL_Basic_to_Advance/tree/main/Data)
