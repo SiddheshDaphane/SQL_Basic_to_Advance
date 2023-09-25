@@ -106,7 +106,10 @@ delete from dept where dep_id = 500 -- Let's remove 500 from dept table.
 UPDATE employee SET dept_id=700 WHERE dept_id = 500 -- We have a employee who's department is not present in dept table.
 
 
+
 -- Q)2  I want the employee who's department not in dept table. 
+
+
 
 /*  There are multiple ways to solve this question and I have solved in every possible way.
 
@@ -167,22 +170,6 @@ WHERE dept_id NOT IN (SELECT dep_id FROM dept)  -- Output is 9100. AVG salary is
 
 ---------------- JOINS and Sub-query --------------------
 
-SELECT A.*, B.*
-FROM
-(SELECT order_id, SUM(sales) as order_sales 
-FROM orders 
-GROUP BY order_id) A 
-INNER JOIN 
-(SELECT AVG(order_sales) AS avg_order_value
-FROM
-(SELECT order_id, SUM(sales) as order_sales
-FROM orders 
-GROUP BY order_id) AS orders_aggregated) B 
-ON 1=1
-WHERE order_sales > avg_order_value;  
-
-
-
 select * from employee
 -- Q)4  Along with the employee_id, I want to see the AVG salary in that department. 
 
@@ -241,3 +228,22 @@ SELECT dept_id, emp_id, AVG(salary) as avg_dept_salary
 FROM employee 
 GROUP BY dept_id, emp_id, -emp_id, emp_name 
 ORDER BY avg_dept_salary 
+
+
+
+-- This is a complex query. Look at the query and break the query. Also what can you make from the query. What are limitation of this? Is this a good appraoch? Is it efficient?
+-- Hint :- This is basically a INNER JOIN.
+
+SELECT A.*, B.*
+FROM
+(SELECT order_id, SUM(sales) as order_sales 
+FROM orders 
+GROUP BY order_id) A 
+INNER JOIN 
+(SELECT AVG(order_sales) AS avg_order_value
+FROM
+(SELECT order_id, SUM(sales) as order_sales
+FROM orders 
+GROUP BY order_id) AS orders_aggregated) B 
+ON 1=1
+WHERE order_sales > avg_order_value;  
