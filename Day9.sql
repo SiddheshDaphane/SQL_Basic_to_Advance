@@ -98,6 +98,21 @@ select order_id, SUM(sales) from orders where order_id = 'CA-2020-107328' GROUP 
 
 select * from employee
 select *  from dept 
-delete from dept where dep_id = 500 
+delete from dept where dep_id = 500 -- Let's remove 500 from dept table. 
 
 
+-- Let's put some department which are not present in dept table for learning purpose
+
+UPDATE employee SET dept_id=700 WHERE dept_id = 500 -- We have a employee who's department is not present in dept table.
+
+
+SELECT * 
+FROM employee
+WHERE dept_id NOT IN (SELECT dep_id FROM dept)
+
+
+SELECT * 
+FROM employee e 
+LEFT JOIN dept d 
+ON e.dept_id = d.dep_id
+WHERE dept_id NOT IN (100,200,300,400)
