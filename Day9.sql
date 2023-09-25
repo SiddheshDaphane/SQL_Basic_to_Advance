@@ -183,9 +183,42 @@ WHERE order_sales > avg_order_value;
 
 
 
+select * from employee
+-- Q)4  Along with the employee_id, I want to see the AVG salary in that department. 
 
--- Along with the employee_id, I want to see the AVG salary in that department. 
+/* Let's look at the question and break it down. Why there was a need to use sub-query? 
+ 
+ So basically I want this output. 
 
+emp_id	emp_name	dept_id	    salary	manager_id	emp_age	                 dob	                 avg_dep_salary
+1	    Ankit	    100	        10000	    4	      39	               8/10/84	                    10000
+2	    Mohit	    100	        15000	    5	      48	               8/10/75	                    10000
+3	    Vikas	    100	        10000	    4	      37	               8/10/86	                    10000
+4	    Rohit	    100	        5000	    2	      16	               8/10/07	                    10000
+5	    Mudit	    200	        12000	    6	      55	               8/10/68	                    9500
+6	    Agam	    200	        12000	    2	      14	               8/10/09	                    9500
+7	    Sanjay	    200	        9000	    2  	      13	               8/10/10	                    9500
+8	    Ashish	    200         5000	    2	      12	               8/10/11	                    9500
+9	    Mukesh	    300	        6000	    6	      51	               8/10/72	                    6000
+10	    Rakesh	    700	        7000	    6	      50	               8/10/73	                    7000
+ 
+ Now here when you look at the table, you realise that you need to GROUP the output by dept_id, so let see what happen when I group by sept_id, 
+ So when I use GROUP BY dept_id, it is giving me a AVG salary of a grouped dept_id but not it doesn'y give me the output as above. If I use GROUP BY dept_id, emp_id then it is giving
+ me a wrong output because when I use both the columns, it will take both columns to group by the result and the AVG will be totally different. To get the above output, we must have 
+ a intermediate result on which we can group by which means we need to have result saved in some form to get desired output and that's why we are using sub-query. 
+ Whenever we need a result of some query stored temporarily, we have to use sub-query. 
+
+ Now, if you look at the coorect query, we can find that we use INNER JOIN on sub-query. But the question is why? Let's break it down. 
+
+The sub-query will give us this output. Anpther IMP info is that, sub-query will create a table which means when we use sub-query in JOINS, we will basically JOINING two tables. 
+
+    dept_id	    avg_dep_salary
+     100	         10000
+     200	         9500
+     300	         6000
+     700	         7000 
+ 
+  */
 
 SELECT e.*, A.avg_dept_salary
 FROM employee e 
@@ -194,3 +227,9 @@ INNER JOIN
 FROM employee 
 GROUP BY dept_id) A
 ON e.dept_id = A.dept_id 
+
+-- What is wrong with this query?
+SELECT dept_id, emp_id, AVG(salary) as avg_dept_salary
+FROM employee 
+GROUP BY dept_id, emp_id--, --emp_id, emp_name 
+ORDER BY avg_dept_salary 
