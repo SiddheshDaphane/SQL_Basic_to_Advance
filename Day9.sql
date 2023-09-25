@@ -163,3 +163,34 @@ SELECT *, (SELECT AVG(salary) AS avg_salary FROM employee)
 FROM employee
 WHERE dept_id NOT IN (SELECT dep_id FROM dept)  -- Output is 9100. AVG salary is 9100 and didn't change even though we have only 1 employee becasue of the order of execution. 
 -- 1st the inner query in the SELECT will run, then inner query in WHERE and then main query. 
+
+
+---------------- JOINS and Sub-query --------------------
+
+SELECT A.*, B.*
+FROM
+(SELECT order_id, SUM(sales) as order_sales 
+FROM orders 
+GROUP BY order_id) A 
+INNER JOIN 
+(SELECT AVG(order_sales) AS avg_order_value
+FROM
+(SELECT order_id, SUM(sales) as order_sales
+FROM orders 
+GROUP BY order_id) AS orders_aggregated) B 
+ON 1=1
+WHERE order_sales > avg_order_value;  
+
+
+
+
+-- Along with the employee_id, I want to see the AVG salary in that department. 
+
+
+SELECT e.*, A.avg_dept_salary
+FROM employee e 
+INNER JOIN 
+(SELECT dept_id, AVG(salary) as avg_dept_salary
+FROM employee 
+GROUP BY dept_id) A
+ON e.dept_id = A.dept_id 
