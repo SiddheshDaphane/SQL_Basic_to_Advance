@@ -106,13 +106,56 @@ delete from dept where dep_id = 500 -- Let's remove 500 from dept table.
 UPDATE employee SET dept_id=700 WHERE dept_id = 500 -- We have a employee who's department is not present in dept table.
 
 
+-- Q)2  I want the employee who's department not in dept table. 
+
+/*  There are multiple ways to solve this question and I have solved in every possible way.
+
+1) Sub-query. -----> Now I want the dept_id which is not present the 'dept' table meaning this is a condition. Which means that it will come in WHERE clause. Why not having?
+because we are using any aggregate function. Now we have a condition about dept_id, which means in WHERE clause we will have to use dept_id.
+One thing is very IMP here. When we are using sub-query, the result or outpur of the sub-query is very imp. It must match the column on which you are making condition. 
+In this solution, the sub-query is returning 'dep_id' from 'dept' table and we are chaking that condition on 'dept_id' from 'employee' table. In 'WHERE' clause, we are using 
+NOT IN and that's why it is okay to sub-query or inner query to return list of output. If you run inner query then you will get an out of 100,200,300,400. Because we are using
+NOT IN, we are not getting error but if use any '>' or '<' operator then it will give an error because both of them expect 1 value only but we are getting list of values and 
+that's why we will get an error. 
+
+
+2) LEFT JOIN. ------> We can also solve this question using LEFT JOIN which is easy and not hard to understand. Only reason I am using LEFT JOIN because we want the employee who's
+department is not present in dept table. 
+
+ */
+
+-- 1) Sub-query
 SELECT * 
 FROM employee
-WHERE dept_id NOT IN (SELECT dep_id FROM dept)
+WHERE dept_id NOT IN (SELECT dep_id FROM dept) -- The output of the sub-query that is inner query must have same as dept_id because we are looking for dept_id in the sub-query. 
+-- The inner query giving list of dep_id i.e. 100,200,300,400. Because we are using NOT IN, it is not giving error because NOT IN expect multiple input, What if we use '>' or '<'
+-- Let try.
+
+SELECT * 
+FROM employee
+WHERE dept_id > (SELECT dep_id FROM dept) --  This will give an error because it expect only 1 value from the inner query because it is comparing the values in it. If you have 
+-- multiple values as a input to dept_id while using '>' or '<' then it cannot process and throws an error. 
 
 
+ 
+
+
+-- 2) LEFT JOIN
 SELECT * 
 FROM employee e 
 LEFT JOIN dept d 
 ON e.dept_id = d.dep_id
 WHERE dept_id NOT IN (100,200,300,400)
+
+
+
+
+
+
+SELECT *, (SELECT AVG(salary) FROM employee)
+FROM employee
+
+
+SELECT *, (SELECT AVG(salary) AS avg_salary FROM employee)
+FROM employee
+WHERE dept_id NOT IN (SELECT dep_id FROM dept) 
