@@ -231,7 +231,7 @@ FROM employee
 GROUP BY dept_id) A
 ON e.dept_id = A.dept_id 
 
--- What is wrong with this query? Why can't we use these queries for the question?
+-- What is wrong with this query? Why can't we use these queries for the question? Why this logic is not correct? What happened when we use multiple columns in GROUP BY?
 SELECT dept_id, emp_id, AVG(salary) as avg_dept_salary
 FROM employee 
 GROUP BY dept_id, emp_id--, --emp_id, emp_name 
