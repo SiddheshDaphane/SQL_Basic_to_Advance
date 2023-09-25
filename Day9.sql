@@ -217,6 +217,9 @@ The sub-query will give us this output. Anpther IMP info is that, sub-query will
      200	         9500
      300	         6000
      700	         7000 
+
+So, when the main query get INNER JOIN with sub-query, it will join on dept_id of employee. Which basically means that the above table will get inner joined with employee table and 
+when we run the query we will get above output which is desired. 
  
   */
 
@@ -228,8 +231,13 @@ FROM employee
 GROUP BY dept_id) A
 ON e.dept_id = A.dept_id 
 
--- What is wrong with this query?
+-- What is wrong with this query? Why can't we use these queries for the question?
 SELECT dept_id, emp_id, AVG(salary) as avg_dept_salary
 FROM employee 
 GROUP BY dept_id, emp_id--, --emp_id, emp_name 
+ORDER BY avg_dept_salary 
+
+SELECT dept_id, emp_id, AVG(salary) as avg_dept_salary
+FROM employee 
+GROUP BY dept_id, emp_id, -emp_id, emp_name 
 ORDER BY avg_dept_salary 
