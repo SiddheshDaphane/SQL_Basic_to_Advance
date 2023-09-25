@@ -137,9 +137,6 @@ WHERE dept_id > (SELECT dep_id FROM dept) --  This will give an error because it
 -- multiple values as a input to dept_id while using '>' or '<' then it cannot process and throws an error. 
 
 
- 
-
-
 -- 2) LEFT JOIN
 SELECT * 
 FROM employee e 
@@ -148,14 +145,21 @@ ON e.dept_id = d.dep_id
 WHERE dept_id NOT IN (100,200,300,400)
 
 
+/* Below both query is very IMP. 
+One query have a sub-query or inner query in SELECT statement and another query have two sub-query or inner query in SELECT and WHERE statement. 
+1) The 1st query tell us that you can have inner-query in SELECT statement also meaning we have inner-query in SELECT, FROM, WHERE, HAVING till now. The output of 1st query is 9100.
 
-
-
+2) The secong query is interesting because it has 2 inner query. Now the output of that query is interesting and it is same as above query that is 9100. This can be explain by the 
+order of execution. 
+SELECT inner query ---> WHERE inner query ----> FROM ----> WHERE ----> SELECT statement. 
+This is very IMP observation. 
+ */
 
 SELECT *, (SELECT AVG(salary) FROM employee)
-FROM employee
+FROM employee -- Output is 9100
 
 
 SELECT *, (SELECT AVG(salary) AS avg_salary FROM employee)
 FROM employee
-WHERE dept_id NOT IN (SELECT dep_id FROM dept) 
+WHERE dept_id NOT IN (SELECT dep_id FROM dept)  -- Output is 9100. AVG salary is 9100 and didn't change even though we have only 1 employee becasue of the order of execution. 
+-- 1st the inner query in the SELECT will run, then inner query in WHERE and then main query. 
