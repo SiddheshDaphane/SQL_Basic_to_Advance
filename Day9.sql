@@ -247,3 +247,64 @@ FROM orders
 GROUP BY order_id) AS orders_aggregated) B 
 ON 1=1
 WHERE order_sales > avg_order_value;  
+
+
+-- Assignment question. Team_name, Matches played, Total_wins and Total_lost 
+select * from icc_world_cup
+
+SELECT team_name, COUNT(1) AS macthes_palyed, SUM(win_flag), COUNT(1)-SUM(win_flag) AS lost_matches
+FROM 
+(SELECT Team_1 AS team_name,Winner,
+CASE WHEN Team_1 = Winner THEN 1 ELSE 0 END AS win_flag
+FROM icc_world_cup
+UNION ALL
+SELECT Team_2 AS team_name, Winner,
+CASE WHEN Team_2 = Winner THEN 1 ELSE 0 END AS win_flag
+FROM icc_world_cup) A
+GROUP BY team_name 
+
+
+
+
+
+
+------------------------------ CTE (Common Table Expression) ----------------------------
+
+SELECT team_name, COUNT(1) AS macthes_palyed, SUM(win_flag), COUNT(1)-SUM(win_flag) AS lost_matches
+FROM 
+(SELECT Team_1 AS team_name,Winner,
+CASE WHEN Team_1 = Winner THEN 1 ELSE 0 END AS win_flag
+FROM icc_world_cup
+UNION ALL
+SELECT Team_2 AS team_name, Winner,
+CASE WHEN Team_2 = Winner THEN 1 ELSE 0 END AS win_flag
+FROM icc_world_cup) A
+GROUP BY team_name ;
+
+
+WITH A AS 
+( SELECT Team_1 AS team_name,Winner,
+CASE WHEN Team_1 = Winner THEN 1 ELSE 0 END AS win_flag
+FROM icc_world_cup
+UNION ALL
+SELECT Team_2 AS team_name, Winner,
+CASE WHEN Team_2 = Winner THEN 1 ELSE 0 END AS win_flag
+FROM icc_world_cup)
+
+SELECT team_name, COUNT(1) AS macthes_palyed, SUM(win_flag), COUNT(1)-SUM(win_flag) AS lost_matches
+FROM A 
+GROUP BY team_name ;
+
+
+WITH dep AS 
+(SELECT dept_id, AVG(salary) as avg_dept_salary
+FROM employee 
+GROUP BY dept_id)
+SELECT e.*, A.avg_dept_salary
+FROM employee e 
+INNER JOIN 
+dep A
+ON e.dept_id = A.dept_id 
+
+
+
