@@ -323,7 +323,9 @@ INNER JOIN
 dep A
 ON e.dept_id = A.dept_id 
 
-
+/* We calculated the AVG salary using sub-query but here we used CTE and we can see the difference in the readability of code. It is more simple and anyone can understand the code
+easily. 
+Important thing to notice here is multiple CTE. "total_salary"(line 334) is another CTE which means we can create multiple CTE and can use them.  */
 
 WITH dep AS 
 (SELECT dept_id, AVG(salary) as avg_dept_salary
@@ -336,8 +338,21 @@ INNER JOIN
 dep A
 ON e.dept_id = A.dept_id 
 
+/* We created multiple CTE and then used them in the JOIN statement. Below is the query on how to use it.    */
 
-
+WITH dep AS 
+(SELECT dept_id, AVG(salary) as avg_dept_salary
+FROM employee 
+GROUP BY dept_id)
+,total_salary AS (select sum(avg_dept_salary) AS ts FROM dep)
+SELECT e.*, A.avg_dept_salary, t.ts
+FROM employee e 
+INNER JOIN 
+dep A
+ON e.dept_id = A.dept_id 
+INNER JOIN 
+total_salary t 
+ON e.dept_id = A.dept_id 
 
 -- 
 
