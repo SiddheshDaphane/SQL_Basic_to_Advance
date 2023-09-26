@@ -396,8 +396,12 @@ B
 ON 1=1  ---- Very interesting. Why 1=1?
 WHERE order_sales > avg_order_value; 
 
-
-
+/* Let's assume you created a CTE but you didn't use in the main query, What will happen? Here is the best part about CTE. You can create as many CTE as you want but if you 
+don't call them in the main query, it will not be executed by the database which saves the computation. But how does that happened? To answer this question we need to know the
+order of execution of the query.
+Main query will execute first. So, it will go to FROM, then it will refer to CTE order_wise_sales and it will execute that, then it will process INNER JOIN on CTE B, then it will
+refer to CTE B and execute that CTE, then it will JOIN on the condition 1=1 and then it will execute WHERE clause. 
+Since the main query didn't refer to the CTE C, it will not execute that. */
 
 WITH 
 order_wise_sales AS 
