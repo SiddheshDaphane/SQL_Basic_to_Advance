@@ -270,6 +270,14 @@ GROUP BY team_name
 
 ------------------------------ CTE (Common Table Expression) ----------------------------
 
+/* CTE or Common table expressions, is basically like a sub-query but with simple readability. Look at the above query, it is more simple and more readable query. 
+One thing is important to remember that CTE always go with main query meaning you cannot create CTE separetly and then use it somewhere else. 
+Along with the readability, We can use CTE multiple times in main query. Meaning we can call it multiple time which means we don't have to write sub-queries again and again,
+We can store a query in the CTE and we can use that CTE again and again.  */
+
+
+-- Comparison of Sub-query and CTE. 1st query is Sub-query and 2nd is CTE. 
+
 SELECT team_name, COUNT(1) AS macthes_palyed, SUM(win_flag), COUNT(1)-SUM(win_flag) AS lost_matches
 FROM 
 (SELECT Team_1 AS team_name,Winner,
@@ -281,6 +289,14 @@ CASE WHEN Team_2 = Winner THEN 1 ELSE 0 END AS win_flag
 FROM icc_world_cup) A
 GROUP BY team_name ;
 
+/* Logic :-  If you look at the CTE query, we used UNION ALL, why is that? Because if you look at the  icc_world_cup, we can see that, there are two columns of teams which 
+put the limitation on GROUP BY clause. If you have to count total number of matches, wins and lost matches then we have to GROUP BY teams and use aggregate functions.
+To use both of these function, we must get an output in vertical format meaning, second column teams must get join with first column vertically and that's why we used
+UNION ALL becasue UNION ALL joins the column or table vertically. We use UNION ALL because we want all the records and don't want to delete any records. 
+We use CASE WHEN to get the condition of winning team. 
+Even after using UNION ALL, we can't get desired output becuase of UINION ALL limitations. Which means that we need to store the output of UINION ALL somewhere. The output is 
+intermidate result on which we will query to get the desired output. So instead of using sub-query, we used CTE for readability. We called that CTE A and then use the result
+or output of that query or CTE to query on it to get the Final output.  */
 
 WITH A AS 
 ( SELECT Team_1 AS team_name,Winner,
@@ -295,6 +311,8 @@ FROM A
 GROUP BY team_name ;
 
 
+
+-- 
 WITH dep AS 
 (SELECT dept_id, AVG(salary) as avg_dept_salary
 FROM employee 
@@ -305,7 +323,7 @@ INNER JOIN
 dep A
 ON e.dept_id = A.dept_id 
 
---
+
 
 WITH dep AS 
 (SELECT dept_id, AVG(salary) as avg_dept_salary
@@ -321,6 +339,7 @@ ON e.dept_id = A.dept_id
 
 
 
+-- 
 
 SELECT A.*, B.*
 FROM
