@@ -381,8 +381,8 @@ SELECT *
 FROM employee
 WHERE dept_id NOT IN (SELECT dep_id FROM dept);
 
-WITH 
-depts AS (SELECT dep_id FROM dept)
+
+WITH depart AS (SELECT dep_id FROM dept)
 SELECT * 
-FROM employee
-WHERE dept_id NOT IN depts 
+FROM employee 
+WHERE dept_id NOT IN depart
