@@ -370,6 +370,15 @@ GROUP BY order_id) AS orders_aggregated) B
 ON 1=1
 WHERE order_sales > avg_order_value; 
 
+/* This example is the reason why CTE is used instead of sub-query in a complex query. 
+Logic :-  The condition of inner join that is ON 1=1 is very interesting. Why it is used? 
+Ans -----> Generally when we use 1=1 condition, it processes like a cross join meaning every row gets join with every other row irrespective of their id's. Here same thing is 
+happening but in a different way. 
+CTE B have a query which is returning on 1 line output that is AVG of order_sales meaning if you run the query inside the CTE B, you will get only 1 output. Now we want the 
+employees who's sales are greater than AVG sales, which means we need to compare the sales of everyone with AVG sales. How can we do that? If we join the value of the AVG sales
+on every row of the employee then we can compare that his/her sales and AVG sales. 
+So basically, we are cross-join both tables and we can do that because CTE B only returning 1 value and we want to attach or join that value on every row and that why the condition
+ON 1=1 works here.   */
 
 WITH 
 order_wise_sales AS 
