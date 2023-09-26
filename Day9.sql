@@ -428,6 +428,7 @@ SELECT *
 FROM employee
 WHERE dept_id NOT IN (SELECT dep_id FROM dept);
 
+/* CTE are good but not in every case you need to use CTE. In this case creating a CTE will not make any sense and that's why using sub-query is good option. */
 
 WITH depart AS (SELECT dep_id FROM dept)
 SELECT * 
