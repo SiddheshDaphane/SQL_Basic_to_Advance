@@ -290,7 +290,6 @@ UNION ALL
 SELECT Team_2 AS team_name, Winner,
 CASE WHEN Team_2 = Winner THEN 1 ELSE 0 END AS win_flag
 FROM icc_world_cup)
-
 SELECT team_name, COUNT(1) AS macthes_palyed, SUM(win_flag), COUNT(1)-SUM(win_flag) AS lost_matches
 FROM A 
 GROUP BY team_name ;
@@ -306,5 +305,84 @@ INNER JOIN
 dep A
 ON e.dept_id = A.dept_id 
 
+--
+
+WITH dep AS 
+(SELECT dept_id, AVG(salary) as avg_dept_salary
+FROM employee 
+GROUP BY dept_id)
+,total_salary AS (select sum(avg_dept_salary) AS ts FROM dep)
+SELECT e.*, A.avg_dept_salary
+FROM employee e 
+INNER JOIN 
+dep A
+ON e.dept_id = A.dept_id 
 
 
+
+
+
+SELECT A.*, B.*
+FROM
+(SELECT order_id, SUM(sales) as order_sales 
+FROM orders 
+GROUP BY order_id) A 
+INNER JOIN 
+(SELECT AVG(order_sales) AS avg_order_value
+FROM
+(SELECT order_id, SUM(sales) as order_sales
+FROM orders 
+GROUP BY order_id) AS orders_aggregated) B 
+ON 1=1
+WHERE order_sales > avg_order_value; 
+
+
+WITH 
+order_wise_sales AS 
+(SELECT order_id, SUM(sales) as order_sales 
+FROM orders 
+GROUP BY order_id),
+B AS 
+(SELECT AVG(order_sales) AS avg_order_value
+FROM order_wise_sales as order_aggregate) 
+
+SELECT A.*, B.*
+FROM order_wise_sales A 
+INNER JOIN 
+B
+ON 1=1  ---- Very interesting. Why 1=1?
+WHERE order_sales > avg_order_value; 
+
+
+
+
+WITH 
+order_wise_sales AS 
+(SELECT order_id, SUM(sales) as order_sales 
+FROM orders 
+GROUP BY order_id),
+B AS 
+(SELECT AVG(order_sales) AS avg_order_value
+FROM order_wise_sales as order_aggregate),
+C AS 
+(SELECT * FROM orders)
+
+SELECT A.*, B.*
+FROM order_wise_sales A 
+INNER JOIN 
+B
+ON 1=1
+WHERE order_sales > avg_order_value; 
+
+
+--
+
+SELECT * 
+FROM employee
+WHERE dept_id NOT IN (SELECT dep_id FROM dept);
+
+WITH 
+depts AS (SELECT dep_id FROM dept)
+SELECT * 
+FROM employee
+WHERE dept_id NOT IN depts 
