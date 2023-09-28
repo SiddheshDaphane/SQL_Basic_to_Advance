@@ -344,7 +344,7 @@ WITH dep AS
 (SELECT dept_id, AVG(salary) as avg_dept_salary
 FROM employee 
 GROUP BY dept_id)
-,total_salary AS (select sum(avg_dept_salary) AS ts FROM dep)
+,total_salary AS (select sum(avg_dept_salary) AS ts FROM dep) -- If we remove 'ts' meaning if we don't aliase it, it will give an error. 
 SELECT e.*, A.avg_dept_salary, t.ts
 FROM employee e 
 INNER JOIN 
