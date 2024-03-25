@@ -1,5 +1,5 @@
 -- Day 1 
-
+select * from amazon_orders;
 -- Creating a table (amazon_orders) with columns and it's data type (DDL)
 CREATE TABLE amazon_orders
 (
@@ -21,3 +21,12 @@ INSERT INTO amazon_orders VALUES(4,'2022-10-02', 'Baby Soap', 310.5, 'Credit Car
 -- If you wan't to delete entire table that is you want to drop it.
 
 DROP TABLE amazon_orders;
+
+-- Let's say you want to delete entire data from table,
+DELETE FROM amazon_orders;
+
+-- DQL (Data query language)
+
+SELECT * 
+FROM amazon_orders
+ORDER BY order_date DESC, product_name; -- This will first sort on order_date in descending order and if the date is same then it will sort by name in ascending order
