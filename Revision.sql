@@ -89,3 +89,58 @@ INSERT INTO a_orders VALUES(3,'2022-10-02', NULL, 15, 'Internate Banking',15); -
 -- What if you want insert values in a particular columns and not in all columns?
 INSERT INTO a_orders(order_id, order_date, product_name,total, payment_method, discount) 
 VALUES(4,'2022-10-02', NULL, 15, 'Internate Banking',15); -- Here we never gave value of "category" but it will take a default value. 
+
+INSERT INTO a_orders(order_id, order_date, product_name,total, payment_method, category) 
+VALUES(5,'2022-10-02', NULL, 15, 'Internate Banking', 'Kids wear'); -- Here we are not giving value for "discount" so it will take a NULL value
+
+INSERT INTO a_orders(order_id, order_date, product_name, total) 
+VALUES(6,'2022-10-02', 'Shirt', 15); -- The DEFAULT constraints on "payment_method" and "category" will insert a value in this statement
+
+INSERT INTO a_orders(order_id, order_date, product_name, total, payment_method) 
+VALUES(6,'2022-10-02', 'Shirt', 15, DEFAULT); -- We can also put "default" to insert a default value
+
+INSERT INTO a_orders(order_id, order_date, product_name, total, payment_method) 
+VALUES(NULL,'2022-10-02', 'Shirt', 15, DEFAULT) -- This will give an error because we set order_id as a primary key. If you only have UNIQUE constraint, we can insert NULL value but only one time
+
+INSERT INTO a_orders(order_id, order_date, product_name, total, payment_method) 
+VALUES(2,'2022-10-02', 'Shirt', 15, DEFAULT) -- This will give an error because primary key i.e. order_id must be UNIQUE and NOT NULL and here the UNIQUE constraint is not getting satisfied
+
+------------------- DELETE STATEMENT -------------------
+
+-- I don't want to delete all the data but I want to delete a specific data, How can I do that?
+
+DELETE FROM a_orders -- This will delete all the data in a table
+
+-- Delete a specific data with WHERE statement
+
+DELETE 
+FROM a_orders
+WHERE order_id = 2 -- We can use this WHERE statement to delete a particular data. 
+/* When we use WHERE, the database will go row by row and match the condition, in this case it is order_id = 2.
+When this condition is satisfied, it will delete the record. 
+*/ 
+
+DELETE 
+FROM a_orders
+WHERE product_name = 'Shirts'
+
+------------ UPDATE STATEMENT ---------------
+
+/* When you want to update a data because data can change over time. How to do that?
+*/
+
+UPDATE a_orders
+SET discount = 10 -- This will update discount of all rows to 10.
+
+-- What if you want to update a specific row?
+
+UPDATE a_orders
+SET discount = 18
+WHERE order_id = 2  
+
+-- Order of execution is UPDATE a_orders ---> WHERE order_id=2 ----> SET discount = 18
+
+-- Updating two columns at a same time
+UPDATE a_orders
+SET discount = 18, payment_method = 'Credit Card'
+WHERE order_id = 2
