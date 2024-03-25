@@ -30,3 +30,20 @@ DELETE FROM amazon_orders;
 SELECT * 
 FROM amazon_orders
 ORDER BY order_date DESC, product_name; -- This will first sort on order_date in descending order and if the date is same then it will sort by name in ascending order
+
+
+
+/* We created a table with column 'order_date' which saves the 'date' format in it but I also wants to save time when order is placed.
+Here comes the ALTER TABLE command. When we create a table and after sometime we want to change the characteristics of the table,
+we can use this command. By using this command, we can change the table without deleting the data.
+This is a DDL because we are changing defination of a data. 
+*/
+
+
+ALTER TABLE amazon_orders ALTER COLUMN order_date DATETIME -- Datetime is new data type
+
+INSERT INTO amazon_orders VALUES(5,'2022-10-01 04:28:30', 'Baby watch', 159, 'UPI');
+
+-- Now you want to add new column to table.
+
+ALTER TABLE amazon_orders ADD COLUMN user_name VARCHAR(20) -- New column is added.
