@@ -77,3 +77,15 @@ discount INT CHECK (discount <= 20),
 category VARCHAR(20) DEFAULT 'Mens Wear'
 PRIMARY KEY (order_id)
 );
+
+INSERT INTO a_orders VALUES(NULL, '2022-10-22', NULL, 15, 'UPI'); -- Because we set NOT NULL constraint on order_id, this statement will give an error
+
+INSERT INTO a_orders VALUES(1,'2022-10-02', NULL,15, 'Internet Banking') -- Because we set CHECK constraint on payment_method, this statement will give an error
+
+INSERT INTO a_orders VALUES(1,'2022-10-05', NULL, 150, 'UPI'); -- Because we set UNIQUE constraint on order_id, this statement will give an error
+
+INSERT INTO a_orders VALUES(3,'2022-10-02', NULL, 15, 'Internate Banking',15); -- This will give an error. Even though you have DEFAULT constraint on category, you are still passing 6 values in 7 columns
+
+-- What if you want insert values in a particular columns and not in all columns?
+INSERT INTO a_orders(order_id, order_date, product_name,total, payment_method, discount) 
+VALUES(4,'2022-10-02', NULL, 15, 'Internate Banking',15); -- Here we never gave value of "category" but it will take a default value. 
