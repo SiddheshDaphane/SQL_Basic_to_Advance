@@ -194,3 +194,19 @@ WHERE ship_mode IN ('First Class','Same day');
 SELECT * 
 FROM orders
 WHERE quantity > 5 AND order_date < '2020-10-06'
+
+------------- Creating NEW COLUMNS for output -------------
+
+SELECT *, profit/sales as ratio 
+FROM orders --- This will not change original table. New columns 'ratio' will come in output
+
+SELECT *, profit/sales AS ratio, GETDATE()
+FROM orders -- GETDATE() function returns current date
+
+
+
+
+
+
+
+
