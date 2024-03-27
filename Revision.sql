@@ -1,4 +1,5 @@
--- Day 1 
+------------------------------------------- Day 1 -------------------------------------------
+
 select * from amazon_orders;
 -- Creating a table (amazon_orders) with columns and it's data type (DDL)
 CREATE TABLE amazon_orders
@@ -144,3 +145,34 @@ WHERE order_id = 2
 UPDATE a_orders
 SET discount = 18, payment_method = 'Credit Card'
 WHERE order_id = 2
+
+----------------------------------------------- DAY 2 ------------------------------------------------------
+
+----- SELECT STATEMENT ------
+
+SELECT TOP 5 order_date, quantity
+FROM orders
+WHERE quantity >= 5
+ORDER BY quantity;  -- Order of E   FROM --> WHERE --> ORDER BY --> SELECT --> TOP 5
+
+SELECT *
+FROM orders
+WHERE order_date < '2018-06-21'
+ORDER BY order_date DESC;
+
+SELECT *
+FROM orders
+WHERE order_date BETWEEN '2020-12-08' AND '2020-12-10'
+ORDER BY order_date DESC;
+
+SELECT *
+FROM orders 
+WHERE quantity IN (3,5) --- 'IN' means 'OR'
+
+SELECT *
+FROM orders 
+WHERE quantity NOT IN ('First Class', 'Same Day');
+
+SELECT * 
+FROM orders 
+WHERE ship_date > 'First Class'; -- This is based on ASCII value
