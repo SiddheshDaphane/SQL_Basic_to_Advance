@@ -319,3 +319,64 @@ Now database is confused. We want to group it by region but what about category.
 technology and Office supplies. After group by, which category should go to the "East" region? 
 And that's why it will give an error.
 */
+
+
+-------------------- Filtering on aggregated values ----------------------
+
+SELECT sub_category, SUM(sales) as total_sales 
+FROM orders 
+WHERE profit > 50
+GROUP BY sub_category
+HAVING SUM(sales) > 100000
+ORDER BY total_sales DESC -- Order of execution FROM --> WHERE --> GROUP BY --> HAVING --> SELECT --> ORDER BY
+
+
+
+/*
+Following is a sample database
+
+
+sub-category date sales
+chairs '2019-01-01' 100
+chairs '2019-10-10' 200
+bookcases '2019-01-01' 300
+bookcases '2020-10-10' 400
+
+
+I am running the following query on this database. What will be the output?
+
+
+SELECT sub-category, SUM(sales) as total_sales, MAX(order_date)
+FROM orders
+GROUP BY sub-category
+HAVING MAX(order_date) > '2020-01-01'
+ORDER BY total_sales DESC;
+
+
+What will be the output?
+
+
+1)charis, 300, '2019-10-10'
+2)bookcase, 400, '2020-10-10'
+3)bookcases, 700, '2020-10-10'
+
+
+Answer :-
+So the answer will be 3) bookcases, 700, '202-10-10'
+Look at the order of exe. It will go FROM then it will GROUP BY. Once it is grouped by sub_categories
+then it will SUM sales which is 700 and then it will give MAX(date)
+Important point here is that the database will not go row by row because we are using the GROUP BY function.
+It will group it and give collective output.
+
+
+SELECT sub-category, SUM(sales) as total_sales, MAX(order_date)
+FROM orders
+WHERE MAX(order_date) > '2020-01-01'
+GROUP BY sub-category
+ORDER BY total_sales DESC;
+
+
+
+
+Answer is (bookcases '2020-10-10' 400) (Think)
+*/
