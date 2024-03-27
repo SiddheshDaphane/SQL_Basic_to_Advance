@@ -240,3 +240,82 @@ WHERE UPPER(customer_name) LIKE 'A%A'
 SELECT *
 FROM orders 
 WHERE UPPER(customer_name) LIKE '_L%' -- means 2nd charecter must be 'L'
+
+SELECT *
+FROM orders
+WHERE UPPER(customer_name) LIKE '_L%' ESCAPE '%' -- If you want to find '%' in the name
+
+-- The should starts with 'C' and in the second position I want 'a' or 'l' then we have to use [al]
+SELECT *
+FROM orders 
+WHERE customer_name LIKE 'C[al]%';
+
+-- What if you don't want your second character to be [al]
+SELECT *
+FROM orders 
+WHERE customer_name LIKE 'C[^al]%';
+
+-- What if you want a second character between 'a' and 'o'
+SELECT *
+FROM orders 
+WHERE customer_name LIKE 'C[a-o]%'
+
+SELECT *
+FROM orders 
+WHERE order_id LIKE 'CA-202[1-2]%';
+
+----------------------------------- WORKING with NULL -------------------------------
+
+SELECT *
+FROM orders 
+WHERE city IS NULL; 
+
+SELECT *
+FROM orders 
+WHERE city IS NOT NULL;
+
+
+--------------------------------- Aggregate Functions ------------------------------------
+
+/* All aggregate function gives a single line output. This is an IMP information
+*/
+
+SELECT COUNT(*) as cnt 
+FROM orders;
+
+SELECT SUM(sales) as total_sales
+FROM orders;
+
+SELECT MAX(sales) as max_sales, MIN(sales) as min_sales, AVG(sales) as avg_sales
+FROM orders;
+
+----------------------------- GROUP BY -------------------------------------
+
+SELECT region, SUM(sales), MAX(sales)
+FROM orders 
+GROUP BY region; -- By using GROUP BY, we are indirectly using DISTINCT because there is "group" for every region
+
+SELECT category, region, SUM(sales), MAX(sales)
+FROM orders 
+GROUP BY region, category; -- Now the data is grouped on region and category means it is a combination of both and each combination is unique
+
+-- Q) What will happen here?
+
+SELECT category, region, SUM(sales) as total_sales
+FROM orders 
+GROUP BY region;
+
+/* Answer and Explanation.
+Answer --> This query will give an error. 
+Explanation --> 
+Let's assume that we have data as follow
+
+region   Category          sales
+East    technology          100
+East    Office Supplies     200
+
+Now when we say "GROUP BY region" the database will group it by region "East", but at the same time category has two values,
+Now database is confused. We want to group it by region but what about category. For "East" region there are two categories,
+technology and Office supplies. After group by, which category should go to the "East" region? 
+And that's why it will give an error.
+*/
