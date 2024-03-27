@@ -380,3 +380,35 @@ ORDER BY total_sales DESC;
 
 Answer is (bookcases '2020-10-10' 400) (Think)
 */
+
+
+/*
+Important Question.
+
+
+Following is the database
+
+
+region sales
+'east' 100
+'east' NULL
+'east' 200
+
+
+SELECT region, AVG(sales) as avg_sales
+FROM orders
+GROUP BY region
+
+
+SELECT region, SUM(sales)/COUNT(region) as x
+FROM orders
+GROUP BY region
+
+
+What will be the output of both queries?
+
+
+The answer is 150 and 100
+*/
+
+ 
