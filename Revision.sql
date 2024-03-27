@@ -176,3 +176,21 @@ WHERE quantity NOT IN ('First Class', 'Same Day');
 SELECT * 
 FROM orders 
 WHERE ship_date > 'First Class'; -- This is based on ASCII value
+
+--------------- Filter on a multiple columns --------------------
+
+SELECT *
+FROM orders 
+WHERE ship_mode = 'First Class' AND segment = 'Consumer';
+
+SELECT * 
+FROM orders
+WHERE ship_mode = 'First Class' OR segment = 'Consumer';
+
+SELECT *
+FROM orders 
+WHERE ship_mode IN ('First Class','Same day'); 
+
+SELECT * 
+FROM orders
+WHERE quantity > 5 AND order_date < '2020-10-06'
