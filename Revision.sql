@@ -203,10 +203,40 @@ FROM orders --- This will not change original table. New columns 'ratio' will co
 SELECT *, profit/sales AS ratio, GETDATE()
 FROM orders -- GETDATE() function returns current date
 
+---------------------- Pattern Matching LIKE operator ------------------------
 
+-- I want customers who's name starts with 'C'. 
+SELECT *
+FROM orders 
+WHERE customer_name LIKE 'C%'; -- Here % means you can have anything after 'C'
 
+SELECT order_id, order_date, customer_name
+FROM orders 
+WHERE customer_name LIKE 'Chris%';
 
+SELECT *
+FROM orders 
+WHERE customer_name LIKE '%Schild'; -- Name ends with 'Schild'
 
+SELECT * 
+FROM orders 
+WHERE customer_name LIKE '%t'; -- Name ends with 't'.
 
+-- I want all the customers who's starting with anything, ending with anything but in between they should have 'ven'.
+SELECT *
+FROM orders 
+WHERE customer_name LIKE '%ven%';
 
+SELECT *
+FROM orders 
+WHERE customer_name LIKE 'A%a' -- You can have anything in between 'A' 'a'.
 
+------ What if database is case sensitive? We can use UPPER() function to make all caps and then search for it
+
+SELECT order_id, order_date, customer_id, customer_name, UPPER(customer_name)
+FROM orders
+WHERE UPPER(customer_name) LIKE 'A%A'
+
+SELECT *
+FROM orders 
+WHERE UPPER(customer_name) LIKE '_L%' -- means 2nd charecter must be 'L'
