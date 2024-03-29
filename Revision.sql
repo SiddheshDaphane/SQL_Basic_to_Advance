@@ -598,3 +598,27 @@ GROUP BY dept_id;
 SELECT dept_id, STRING_AGG(emp_name, ':') WITHIN GROUP (ORDER BY salary DESC) AS list_name 
 FROM employee
 GROUP BY dept_id;
+
+-------------------------------- DATE Functions ----------------------------------
+
+SELECT order_id, order_date
+FROM orders;
+
+----- DATEPART function :- extracting year, month and day from date.
+
+SELECT order_id, order_date, DATEPART(year, order_date) AS year_of_orders
+FROM orders;
+
+SELECT order_id, DATEPART(month, order_date) AS month_of_order, DATEPART(week, order_date) AS week_of_order, DATEPART(WEEKDAY, order_date) AS day_of_orders
+FROM orders
+
+/* yyyy - Year
+q - Quarter
+m - Month
+y - Day of year
+d - Day
+w - Weekday
+ww - Week of year
+h - Hour
+n - Minute
+s - Second */
