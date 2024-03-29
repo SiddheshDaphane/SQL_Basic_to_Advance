@@ -435,3 +435,126 @@ INNER jOIN returns r
 ON o.order_id = r.order_id; -- SO we joined two tables in "order_id" but 1 order might contain more than 1 product and each product have different "product_id". Now let's assume that
 -- in 1 "order_id" there are 3 products. Maybe only 1 product is return and not all but if we joined on "order_id" it says that all the product of that order have been returned. So
 -- if we want to find only returned prodcut, "inner join" is not good option.
+
+
+
+-- 2) LEFT JOIN (The LEFT JOIN keyword returns all records from the left table (table1), and the matching records from the right table (table2). The result is 0 records from the right side, if there is no match.)
+
+-- Q) I want all the records which are not present in returns table meaning I want records which are not being return (Interview question)
+
+SELECT o.order_id, o.product_id, r.return_reason, r.order_id as ret 
+FROM orders o 
+LEFT JOIN returns r
+ON o.order_id = r.order_id
+WHERE r.order_id IS NULL;
+
+-- How much sales I lost because of return orders?
+SELECT r.return_reason, SUM(sales) as total_sales
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id
+GROUP BY return_reason;
+
+SELECT SUM(sales) as total_sales
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id;
+
+----------------------------- FOR CROSS JOIN ----------------------------------
+
+/* In cross join you will get (number of records in 1 table)*(number of records in another) as number of output.
+*/
+create table employee(
+emp_id int,
+emp_name varchar(20),
+dept_id int,
+salary int,
+manager_id int,
+emp_age int
+);
+
+
+insert into employee values(1,'Ankit',100,10000,4,39);
+insert into employee values(2,'Mohit',100,15000,5,48);
+insert into employee values(3,'Vikas',100,10000,4,37);
+insert into employee values(4,'Rohit',100,5000,2,16);
+insert into employee values(5,'Mudit',200,12000,6,55);
+insert into employee values(6,'Agam',200,12000,2,14);
+insert into employee values(7,'Sanjay',200,9000,2,13);
+insert into employee values(8,'Ashish',200,5000,2,12);
+insert into employee values(9,'Mukesh',300,6000,6,51);
+insert into employee values(10,'Rakesh',500,7000,6,50);
+select * from employee;
+
+
+create table dept(
+dep_id int,
+dep_name varchar(20)
+);
+insert into dept values(100,'Analytics');
+insert into dept values(200,'IT');
+insert into dept values(300,'HR');
+insert into dept values(400,'Text Analytics');
+select * from dept;
+
+SELECT * FROM employee  -- 10 records
+SELECT * FROM dept  --  4 rows
+
+
+--- New syntax.
+SELECT *
+FROM employee, dept 
+ORDER BY employee.emp_id; -- 40 records. (10*4) because of cross-join.
+
+SELECT *
+FROM employee
+INNER JOIN dept 
+ON 1=1 
+ORDER BY employee.emp_id; -- same query as above.
+
+SELECT *
+FROM employee
+LEFT JOIN dept 
+ON 1=1
+ORDER BY employee.emp_id;
+
+SELECT *
+FROM employee e 
+INNER JOIN dept d
+ON e.dept_id = d.dep_id;
+
+SELECT *
+FROM employee e 
+LEFT JOIN dept d
+ON e.dept_id = d.dep_id;
+
+SELECT e.emp_id, e.emp_name, e.dept_id,d.dep_id, d.dep_name
+FROM employee e
+FULL OUTER JOIN dept d
+ON e.dept_id = d.dep_id ------- Whatever common in left both table will come and also whatever unique in both tables will also come. 11 rows.
+
+/* FULL OUTER JOIN is very different from UNION ALL because UNION ALL will not join the records from both tables even though they have common joining ID and 
+if you take a COUNT of that query, then in this case it will be 14 but count of FULL OUTER JOIN is 11 */
+
+
+CREATE TABLE people
+(
+manager VARCHAR(20),
+region VARCHAR(10)
+)
+DROP TABLE people
+INSERT INTO people
+VALUES('Ankit','West')
+,('Deepak','East')
+,('Vishal','Central')
+,('Sanjay','South')
+
+
+SELECT * FROM people
+SELECT * FROM orders
+
+SELECT o.order_id , o.product_id, r.return_reason, p.manager
+FROM orders o
+INNER JOIN returns r ON o.order_id = r.order_id
+INNER JOIN people p ON p.region = o.region
+-- You can also use the returns table if there is the same column. AND the result of first inner join will be inner joined with people table
