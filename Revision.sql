@@ -622,3 +622,28 @@ ww - Week of year
 h - Hour
 n - Minute
 s - Second */
+
+
+--------- DATEADD Function :- Add and sustract something from date
+
+SELECT order_id, order_date,
+DATEADD(day,5,order_date) as day_of_orders -- Adding 5 days in order_date
+FROM orders;
+
+SELECT order_id, order_date,
+DATEADD(week,5,order_date) AS week_of_orders
+FROM orders;
+
+SELECT order_id, order_date, 
+DATEADD(week, -5, order_date) as day_of_orders
+FROM orders; -- remove 5 weeks from order_date
+
+--------------- DATEDIFF function :- Difference between two dates
+
+SELECT order_id, order_date,
+DATEDIFF(day, order_date, ship_date) AS days_diff_in_day
+FROM orders;
+
+SELECT order_id, order_date,
+DATEDIFF(week,order_date,ship_date) AS weeks_diff
+FROM orders;
