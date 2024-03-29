@@ -647,3 +647,28 @@ FROM orders;
 SELECT order_id, order_date,
 DATEDIFF(week,order_date,ship_date) AS weeks_diff
 FROM orders;
+
+----------------------- CASE WHEN FUNCTION --------------------------
+
+/* CASE statements are executed from TOP to BOTTOM. If one condition is satisfied then it will stop. */
+
+SELECT order_id, profit,
+CASE 
+WHEN profit < 100 THEN 'Low Profit'
+WHEN profit < 250 THEN 'Medium Profit'
+WHEN profit < 400 THEN 'High Profit'
+ELSE 'Very high profit'
+END AS profit_category
+FROM orders
+ORDER BY profit DESC;
+
+/*  There won't be any 'low profit' because we put medium profit above 'low profit' */
+SELECT order_id, profit,
+CASE 
+WHEN profit < 250 THEN 'Medium Profit'
+WHEN profit < 100 THEN 'Low Profit'
+WHEN profit < 400 THEN 'High Profit'
+ELSE 'Very high profit'
+END  AS profit_category
+FROM orders
+ORDER BY profit DESC;
