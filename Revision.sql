@@ -558,3 +558,20 @@ FROM orders o
 INNER JOIN returns r ON o.order_id = r.order_id
 INNER JOIN people p ON p.region = o.region
 -- You can also use the returns table if there is the same column. AND the result of first inner join will be inner joined with people table
+
+
+SELECT * FROM employee; -- manager_id is referring to employee_id. 
+
+-- I want to know the manager name
+SELECT e1.emp_id,e1.emp_name AS emp_name ,e2.emp_id AS manager_id,e2.emp_name AS manager_name
+FROM employee e1
+INNER JOIN employee e2
+ON e1.manager_id = e2.emp_id; 
+
+-- Find the employee whose salary is greater than his/her manager
+SELECT e1.emp_id, e1.emp_name, e2.emp_id AS manager_id, e2.emp_name AS manager_name
+FROM employee e1
+INNER JOIN employee e2
+ON e1.manager_id = e2.emp_id
+WHERE e1.salary > e2.salary;
+
