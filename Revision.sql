@@ -569,9 +569,32 @@ INNER JOIN employee e2
 ON e1.manager_id = e2.emp_id; 
 
 -- Find the employee whose salary is greater than his/her manager
-SELECT e1.emp_id, e1.emp_name, e2.emp_id AS manager_id, e2.emp_name AS manager_name
+SELECT e1.emp_id, e1.emp_name, e2.emp_id AS manager_id, e2.emp_name AS manager_name, e1.salary AS emp_sal, e2.salary AS man_sal
+FROM employee e1
+INNER JOIN employee e2
+ON e1.manager_id = e2.emp_id;
+
+SELECT e1.emp_id, e1.emp_name, e2.emp_id AS manager_id, e2.emp_name AS manager_name, e1.salary AS emp_sal, e2.salary AS man_sal
 FROM employee e1
 INNER JOIN employee e2
 ON e1.manager_id = e2.emp_id
 WHERE e1.salary > e2.salary;
 
+----------------------------- STRING Functions ---------------------------------
+
+-- STRING_AGG (Basically aggreagte string using group_by clause)
+
+SELECT STRING_AGG(emp_name, ',') AS list_of_employees
+FROM employee
+
+SELECT dept_id, STRING_AGG(emp_name, ',') AS list_of_employees -- separated by ','
+FROM employee
+GROUP BY dept_id;
+
+SELECT dept_id, STRING_AGG(emp_name, ':') WITHIN GROUP (ORDER BY emp_name) AS list_of_employees
+FROM employee
+GROUP BY dept_id;
+
+SELECT dept_id, STRING_AGG(emp_name, ':') WITHIN GROUP (ORDER BY salary DESC) AS list_name 
+FROM employee
+GROUP BY dept_id;
