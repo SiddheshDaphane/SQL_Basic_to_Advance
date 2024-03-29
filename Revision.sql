@@ -335,7 +335,6 @@ ORDER BY total_sales DESC -- Order of execution FROM --> WHERE --> GROUP BY --> 
 /*
 Following is a sample database
 
-
 sub-category date sales
 chairs '2019-01-01' 100
 chairs '2019-10-10' 200
@@ -345,21 +344,17 @@ bookcases '2020-10-10' 400
 
 I am running the following query on this database. What will be the output?
 
-
 SELECT sub-category, SUM(sales) as total_sales, MAX(order_date)
 FROM orders
 GROUP BY sub-category
 HAVING MAX(order_date) > '2020-01-01'
 ORDER BY total_sales DESC;
 
-
 What will be the output?
-
 
 1)charis, 300, '2019-10-10'
 2)bookcase, 400, '2020-10-10'
 3)bookcases, 700, '2020-10-10'
-
 
 Answer :-
 So the answer will be 3) bookcases, 700, '202-10-10'
@@ -375,11 +370,9 @@ WHERE MAX(order_date) > '2020-01-01'
 GROUP BY sub-category
 ORDER BY total_sales DESC;
 
-
-
-
 Answer is (bookcases '2020-10-10' 400) (Think)
 */
+
 
 
 /*
@@ -387,7 +380,6 @@ Important Question.
 
 
 Following is the database
-
 
 region sales
 'east' 100
@@ -412,3 +404,34 @@ The answer is 150 and 100
 */
 
  
+----------------------------- DAY 3 ----------------------------
+
+SELECT * FROM orders; -- 9994 rows
+SELECT * FROM returns; -- 296 rows    
+
+---------------- JOINS
+
+-- 1) INNER JOIN (The INNER JOIN keyword returns only rows with a match in both tables.)
+
+SELECT o.order_id, o.order_date, return_reason
+FROM orders o
+INNER JOIN returns r 
+ON o.order_id = r.order_id;  -- 800 rows
+
+
+SELECT DISTINCT o.order_id
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id; -- 296 rows. All the "order_id" in "returns" table are present in "orders" and all are unique that's why 296 rows
+
+SELECT DISTINCT r.order_id
+FROM orders o 
+INNER JOIN returns r 
+ON o.order_id = r.order_id; -- Same as above
+
+SELECT DISTINCT o.*, return_reason
+FROM orders o 
+INNER jOIN returns r 
+ON o.order_id = r.order_id; -- SO we joined two tables in "order_id" but 1 order might contain more than 1 product and each product have different "product_id". Now let's assume that
+-- in 1 "order_id" there are 3 products. Maybe only 1 product is return and not all but if we joined on "order_id" it says that all the product of that order have been returned. So
+-- if we want to find only returned prodcut, "inner join" is not good option.
