@@ -734,3 +734,45 @@ FROM orders
 SELECT TRIM('  Siddhesh     ') AS removed_sapce,
 TRIM(' Siddhesh Daphane     '         ) AS doesnt_remove_inbetween_space
 FROM orders
+
+--- All IMP string functions
+SELECT 'Siddhesh Daphane',
+LEFT('Siddhesh Daphane',4) AS left_char,
+RIGHT('Siddhesh Daphane', 6) AS right_char,
+SUBSTRING('Siddhesh Daphane', 4, 5) AS char_in_between,
+SUBSTRING('Siddhesh Daphane', 4, 4) AS year_in_order_id,  -- 4 is included here.
+CHARINDEX(' ', 'Siddhesh Daphane') AS space_position,
+CHARINDEX('S', 'Siddhesh Daphane') AS C_position,
+CHARINDEX('s', 'Siddhesh Daphane') AS C_position, -- case sensitive
+CHARINDEX('d', 'Siddhesh Daphane') AS n_position, -- If it is repeating, then it will give the position of the first occurrence.
+CHARINDEX('d', 'Siddhesh Daphane',5) AS from_5th_to_find_n_position,
+CHARINDEX('d', 'Siddhesh Daphane',11) AS from_11th_to_find_n_position,
+CHARINDEX('d', 'Siddhesh Daphane',CHARINDEX('n', customer_name)+1) AS from_second_position_onwards,
+CONCAT('My name is', 'Siddhesh Daphane') AS concated_without_space, -- Attached without space
+CONCAT('My name is',' ', 'Siddhesh Daphane') AS concated_with_space,
+('My name is'+'Siddhesh Daphane') AS by_using_sign,
+('My name is'+' '+ 'Siddhesh Daphane') AS adding_space_also,
+REPLACE('Siddhesh Daphane', ' ','+') AS space_is_replaced_with_sign, -- Case Sensitive
+TRANSLATE('Siddhesh Daphane','AG','TA') AS A_with_T_and_G_with_A,
+REVERSE('Siddhesh Daphane') AS reversed_name,
+TRIM(' Siddhesh    ') AS removed_spaces,
+TRIM(' Siddhesh Daphane    '    ) AS Doesnt_remove_in_between_spaces
+FROM orders
+
+---- NULL handling functions
+
+SELECT order_id, city
+FROM orders
+WHERE city is NULL;
+
+-- ISNULL function --> replace the null value with what you gave
+
+SELECT order_id, city,
+ISNULL(city,'unknown') AS new_city
+FROM orders;
+
+-- COALESCE ------> Can take multiple values and it takes first not null values
+SELECT order_id, city, state, 
+COALESCE(city,state,region,'unknown') -- If city is null, it will take State value, if state is NULL, it will take region value and if everything is null then it will take unknown value that we gave
+FROM orders
+WHERE city IS NULL;
