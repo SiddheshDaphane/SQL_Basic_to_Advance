@@ -776,3 +776,100 @@ SELECT order_id, city, state,
 COALESCE(city,state,region,'unknown') -- If city is null, it will take State value, if state is NULL, it will take region value and if everything is null then it will take unknown value that we gave
 FROM orders
 WHERE city IS NULL;
+
+-------------------------------- CAST and ROUND Function ---------------------------------
+SELECT top 5 order_id, sales,
+CAST(sales as INT) AS sales_int,
+ROUND(sales,1) AS rounded_value
+FROM orders;  
+
+
+--------------------------------- SET functions or Queries ------------------------------
+
+-- 1) UNION ALL - It will just combine the data. We will get all the rows from both columns.
+
+CREATE TABLE orders_west 
+(
+order_id int,
+region varchar(10),
+sales int 
+)
+
+
+CREATE TABLE orders_east
+(
+order_id int,
+region varchar(10),
+sales int 
+)
+
+
+INSERT INTO order_west values(1, 'west', 100), (2, 'west', 200)
+INSERT INTO order_west values(3, 'east', 100)
+
+INSERT INTO order_east values(3, 'east', 100), (2, 'east', 300)
+INSERT INTO order_west values(1, 'west', 100)
+
+/* Data type and number of columns must be same in both select statement.  */
+
+SELECT * FROM order_west
+UNION ALL 
+SELECT * FROM order_east
+
+-- UNION --> Will remove the duplicate 
+SELECT * FROM order_west
+UNION 
+SELECT * FROM order_east
+
+
+-- INTERSECT ---> Will give common record. 
+SELECT * FROM order_west
+INTERSECT
+SELECT * FROM order_east
+
+-- We can use on any column. Name can be different but data type and number of columns must be same
+SELECT order_id, sales
+FROM order_west
+INTERSECT 
+SELECT order_id, sales
+FROM order_east
+
+-- Output will be nothing because we are INTERSECTING sales to order_id. But this query will not give an error. 
+SELECT sales, order_id
+FROM order_west
+INTERSECT 
+SELECT order_id, sales
+FROM order_east 
+
+
+-- EXCEPT --> Showing records without any common in both tables. 
+
+SELECT * FROM order_west
+EXCEPT
+SELECT * FROM order_east -- This only shows the record in one table i.e. order_west
+
+
+-- This query gives the ouput from both tables. 
+(SELECT *
+FROM order_west
+INTERSECT 
+SELECT *
+FROM order_east)
+UNION ALL
+(SELECT * FROM order_west
+EXCEPT
+SELECT * FROM order_east) 
+
+-- NULL also get returned in output in INTERSECT
+SELECT *, NULL FROM order_west
+INTERSECT
+SELECT *, NULL FROM order_east
+
+
+-- UNION ALL ------> Gives all the values
+-- UNION ----------> Removes the duplicates and then gives the output
+-- INTERSECT ------> Gives common records only. (This also removes the duplicates)
+-- EXCEPT ---------> Give the record which are not common in both tables
+
+
+/* Only UNION ALL will give duplicates and all other will remove the dublicates */
