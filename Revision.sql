@@ -672,3 +672,65 @@ ELSE 'Very high profit'
 END  AS profit_category
 FROM orders
 ORDER BY profit DESC;
+
+
+------------------------------------ DAY 4 ------------------------------------
+
+--------  STRING functions
+
+-- 1) LEN
+SELECT order_id, customer_name,
+LEN(customer_name) AS len_of_cus,
+LEN('   Claire Gute       ') AS len_with_space -- It is counting spaces before 'Claire' also but not counting after 'Gute'.
+FROM orders
+
+-- 2) LEFT, RIGHT :- give number of characters (space also included and starts from 1)
+SELECT order_id, customer_name,
+LEFT(customer_name,4) AS left_char,
+RIGHT(customer_name,6) AS right_char
+FROM orders
+
+-- 3) SUBSTRING :- If you want string in between
+SELECT order_id, customer_name,
+SUBSTRING(customer_name,4,5) -- starts from 4th character and give me 5 more including 4th letter
+FROM orders 
+
+-- 4) CHARINDEX :- It gives posistion of the character. 
+SELECT order_id, customer_name,
+CHARINDEX(' ', customer_name) AS space_position, -- Gives 1st occurrence.
+CHARINDEX('C', customer_name) AS C_position,
+CHARINDEX('c', customer_name) AS c_position, -- case sensitive
+CHARINDEX('n', customer_name) AS n_position, -- If it is repeating, then it will give the position of the first occurrence.
+CHARINDEX('n', customer_name,5) AS from_5th_to_find_n_position,
+CHARINDEX('n', customer_name,11) AS from_11th_to_find_n_position,
+CHARINDEX('n',customer_name,CHARINDEX('n', customer_name)+1) AS from_second_position_onwards
+FROM orders
+
+-- 5) CONCAT :- Attach two columns
+SELECT order_id, customer_name,
+CONCAT(order_id, customer_name) AS concated_without_space,
+CONCAT(order_id, ' ', customer_name) AS concated_with_space,
+(order_id+customer_name) AS by_using_sign,
+(order_id+' '+customer_name) AS adding_space_also
+FROM orders 
+
+-- 6) REPLACE 
+SELECT order_id, customer_name,
+REPLACE(order_id, 'CA','PB') AS replaced_CA_to_PB_in_order_id,
+REPLACE(customer_name, 'A','B') AS A_is_replaced_with_B
+FROM orders
+
+-- 7) TRANSLATE :- It will replace character by character
+SELECT order_id, customer_name,
+TRANSLATE(customer_name, 'AG','TA') AS A_with_T_and_G_with_A -- case sensitive
+FROM orders
+
+-- 8) REVERSE 
+SELECT order_id, customer_name,
+REVERSE(customer_name) AS reversed_name
+FROM orders
+
+-- TRIM 
+SELECT TRIM('  Siddhesh     ') AS removed_sapce,
+TRIM(' Siddhesh Daphane     '         ) AS doesnt_remove_inbetween_space
+FROM orders
