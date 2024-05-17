@@ -921,3 +921,40 @@ INSERT INTO dept1(dep_id, dep_name) VALUES (300,'RnD')
 INSERT INTO dept1 VALUES (400,'ML') -- Don't need to give names of columns. It identify itself.
 
 select * from dept1 
+
+--------------------------------------------------------------------------------
+
+CREATE TABLE items 
+(
+  sub_category varchar(30),
+  order_date DATE,
+  sales INT
+);
+
+
+
+INSERT INTO items VALUES ('chairs','2019-01-01',100);
+INSERT INTO items VALUES ('chairs','2019-10-10',200);
+INSERT INTO items VALUES ('bookcases','2019-01-01',300);
+INSERT INTO items VALUES ('bookcases','2020-10-10',100);
+
+SELECT sub_category, SUM(sales) as total_sales, MAX(order_date)
+FROM items
+GROUP BY sub_category
+HAVING MAX(order_date) > '2020-01-01'
+ORDER BY total_sales DESC;
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------ SUB-QUERY --------------------------------
+
