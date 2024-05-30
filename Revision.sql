@@ -922,7 +922,7 @@ INSERT INTO dept1 VALUES (400,'ML') -- Don't need to give names of columns. It i
 
 select * from dept1 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE items 
 (
@@ -936,7 +936,7 @@ CREATE TABLE items
 INSERT INTO items VALUES ('chairs','2019-01-01',100);
 INSERT INTO items VALUES ('chairs','2019-10-10',200);
 INSERT INTO items VALUES ('bookcases','2019-01-01',300);
-INSERT INTO items VALUES ('bookcases','2020-10-10',100);
+INSERT INTO items VALUES ('bookcases','2020-10-10',400);
 
 SELECT sub_category, SUM(sales) as total_sales, MAX(order_date)
 FROM items
@@ -944,14 +944,26 @@ GROUP BY sub_category
 HAVING MAX(order_date) > '2020-01-01'
 ORDER BY total_sales DESC;
 
+select * from items;
+
+SELECT sub_category, SUM(sales) as total_sales, MAX(order_date)
+FROM items
+WHERE (order_date) > '2020-01-01'
+GROUP BY sub_category
+ORDER BY total_sales DESC;
 
 
 
 
 
+select * from orders;
+select * from returns;
 
 
-
+SELECT o.order_id, o.order_date, return_reason
+FROM orders o
+INNER JOIN returns r 
+ON o.order_id = r.order_id;
 
 
 
