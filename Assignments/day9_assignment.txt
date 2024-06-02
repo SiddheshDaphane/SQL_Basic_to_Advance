@@ -1,0 +1,26 @@
+Note: please do not use any functions which are not taught in the class. you need to solve the questions only with the concepts that have been discussed so far.
+
+1- write a query to find premium customers from orders data. Premium customers are those who have done more orders than average no of orders per customer.
+2- write a query to find employees whose salary is more than average salary of employees in their department
+3- write a query to find employees whose age is more than average age of all the employees.
+4- write a query to print emp name, salary and dep id of highest salaried employee in each department 
+5- write a query to print emp name, salary and dep id of highest salaried overall
+6- write a query to print product id and total sales of highest selling products (by no of units sold) in each category
+
+signup on https://datalemur.com/questions --its free
+
+solve below questions. You can write SQLs and verify on the platform itself.
+
+Note : The platform supports only postgreSQL so there may be few diffrences in functions. Listing down some important diffrences:
+
+SQL server -> postgreSQL
+to extract a part of the date
+datepart(day,order_date) -> extract (day from order_date)
+
+to convert datetime/timestamp field to date or any other type of type casting 
+cast(order_date as date) -> order_date::date
+
+
+7- https://datalemur.com/questions/signup-confirmation-rate
+8- https://datalemur.com/questions/supercloud-customer
+

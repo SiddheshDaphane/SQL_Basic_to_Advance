@@ -87,3 +87,43 @@ FROM window_func
 WHERE rn <= 5 ; 
 
 
+
+--------- LEAD and LAG function
+
+-- I am getting values of next row of "salary" by using LEAD() function. 
+SELECT emp_id, emp_name, salary, 
+LEAD(salary,1) OVER(ORDER BY salary desc) AS salary_of_next_row
+FROM employee
+
+SELECT emp_id, emp_name, salary, dept_id,
+LEAD(salary,1) OVER(PARTITION BY dept_id ORDER BY salary desc) AS salary_of_next_row
+FROM employee
+
+
+-- LAG function (I am getting previous value of salary)
+
+SELECT emp_id, emp_name, salary, 
+LAG(salary,1) OVER(ORDER BY salary desc) AS salary_of_next_row
+FROM employee
+
+SELECT emp_id, emp_name, salary, 
+LAG(salary,1) OVER(PARTITION BY dept_id ORDER BY salary desc) AS salary_of_next_row
+FROM employee
+
+-- BOTH at the same time. We can achieve same result just by chaging order by with ASC and DESC
+SELECT emp_id, emp_name, salary, 
+LAG(salary,1) OVER(PARTITION BY dept_id ORDER BY salary asc) AS salary_of_previous_row,
+LEAD(salary,1) OVER(PARTITION BY dept_id ORDER BY salary desc) AS salary_of_next_row
+FROM employee
+
+SELECT emp_id, emp_name, salary, 
+LAG(emp_age,1) OVER(PARTITION BY dept_id ORDER BY salary asc) AS age_of_previous_row,
+LEAD(emp_age,1) OVER(PARTITION BY dept_id ORDER BY salary desc) AS age_of_next_row
+FROM employee
+
+
+--- FIRST VALUES
+
+SELECT emp_id, emp_name,emp_age, salary, 
+FIRST_VALUE(emp_age) OVER(PARTITION BY dept_id ORDER BY salary desc) AS first_age_value
+FROM employee
