@@ -37,3 +37,53 @@ FROM employee )
 SELECT * FROM table_01
 WHERE rn <= 2
 
+
+
+-------- Different window functions
+
+-- See the difference between various window functions output
+SELECT *,
+ROW_NUMBER() OVER( ORDER BY salary) as rn,
+RANK() OVER( ORDER BY salary) as rnk,
+DENSE_RANK() OVER( ORDER BY salary) as d_rnk
+FROM employee
+
+
+SELECT *,
+ROW_NUMBER() OVER(PARTITION BY dept_id ORDER BY salary) as rn,
+RANK() OVER(PARTITION BY dept_id ORDER BY salary) as rnk,
+DENSE_RANK() OVER(PARTITION BY dept_id ORDER BY salary) as d_rnk
+FROM employee
+
+
+--- print top 5 selling product from each category by sell
+
+select DISTINCT product_id from orders;
+
+
+with total AS (
+SELECT category, product_id, sum(sales) as total_sales
+FROM orders
+GROUP BY category, product_id),
+window_func AS (
+SELECT *,
+RANK() OVER(PARTITION BY category ORDER BY total_sales desc ) rn
+FROM total)
+SELECT * 
+FROM window_func
+WHERE rn <= 5 ; 
+
+--- OR
+
+with 
+window_func AS (
+SELECT category, product_id, SUM(sales) AS total_sales,
+RANK() OVER(PARTITION BY category ORDER BY sum(sales) desc ) rn
+FROM orders 
+GROUP BY category, product_id
+)
+SELECT * 
+FROM window_func
+WHERE rn <= 5 ; 
+
+
