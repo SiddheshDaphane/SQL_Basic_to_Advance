@@ -127,3 +127,86 @@ FROM employee
 SELECT emp_id, emp_name,emp_age, salary, 
 FIRST_VALUE(emp_age) OVER(PARTITION BY dept_id ORDER BY salary desc) AS first_age_value
 FROM employee
+
+
+--------- Assignment
+
+
+-- 1- write a query to print 3rd highest salaried employee details for each department (give preferece to younger employee in case of a tie). 
+-- In case a department has less than 3 employees then print the details of highest salaried employee in that department.
+
+select * from employee;
+
+-- My solution
+with rnk AS (
+select *,
+DENSE_RANK() OVER(PARTITION BY dept_id ORDER BY salary desc) as rn
+FROM employee),
+cnt AS (
+SELECT dept_id, count(1) as no_of_employees
+FROM employee
+GROUP BY dept_id)
+SELECT *
+FROM rnk 
+INNER JOIN cnt 
+ON rnk.dept_id = cnt.dept_id
+WHERE rn = 3 OR (no_of_employees < 3 and rn=1)
+
+-- or 
+
+with rnk as (
+select *, dense_rank() over(partition by dept_id order by salary desc) as rn
+,count(1) over(partition by dept_id ) as no_of_emp
+from employee)
+select
+*
+from 
+rnk 
+where rn=3 or  (no_of_emp<3 and rn=1) 
+
+
+--- Solution
+
+with rnk as (
+select *, dense_rank() over(partition by dept_id order by salary desc) as rn
+from employee)
+,cnt as (select dept_id,count(1) as no_of_emp from employee group by dept_id)
+select
+rnk.*
+from 
+rnk 
+inner join cnt on rnk.dept_id=cnt.dept_id
+where rn=3 or  (no_of_emp<3 and rn=1); 
+
+
+-- 2) write a query to find top 3 and bottom 3 products by sales in each region.
+
+select * from orders
+
+with sales_by_region AS (
+select region, product_id, SUM(sales) as total_sales_by_region
+from orders
+GROUP BY region, product_id)
+, window_func AS ( 
+SELECT *,
+RANK() OVER(PARTITION BY region ORDER BY total_sales_by_region desc) as d_rnk,
+RANK() OVER(PARTITION BY region ORDER BY total_sales_by_region ASC) as a_rnk
+FROM sales_by_region)
+SELECT region,product_id,total_sales_by_region,
+CASE WHEN d_rnk <= 3 THEN 'Top 3' ELSE 'Bottom 3' END AS top_bottom
+FROM window_func
+WHERE d_rnk <=3 OR a_rnk <= 3;
+
+
+with region_sales as (
+select region,product_id,sum(sales) as sales
+from orders
+group by region,product_id
+)
+,rnk as (select *, rank() over(partition by region order by sales desc) as drn
+, rank() over(partition by region order by sales asc) as arn
+from region_sales
+)
+select region,product_id,sales,case when drn <=3 then 'Top 3' else 'Bottom 3' end as top_bottom
+from rnk
+where drn <=3 or arn<=3
