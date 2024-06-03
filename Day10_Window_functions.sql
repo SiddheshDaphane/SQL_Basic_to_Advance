@@ -210,3 +210,37 @@ from region_sales
 select region,product_id,sales,case when drn <=3 then 'Top 3' else 'Bottom 3' end as top_bottom
 from rnk
 where drn <=3 or arn<=3
+
+
+-- 3- Among all the sub categories..which sub category had highest month over month growth by sales in Jan 2020.
+
+select * from orders
+
+
+-- My solution
+WITH sub_cat_sales AS (
+SELECT sub_category, TRIM(CONCAT(YEAR(order_date),MONTH(order_date))) as ym, SUM(sales) as sub_sales
+FROM orders
+GROUP BY sub_category, CONCAT(YEAR(order_date),MONTH(order_date)))
+, win_fun AS (
+SELECT *,
+LAG(sub_sales,1) OVER(PARTITION BY sub_category ORDER BY ym) as prev_sales
+FROM sub_cat_sales )
+SELECT *,(sub_sales - prev_sales)/prev_sales AS mom_growth
+FROM win_fun
+WHERE ym = '20201'
+order by mom_growth
+
+
+-- solution
+with sbc_sales as (
+select sub_category,format(order_date,'yyyyMM') as year_month, sum(sales) as sales
+from orders
+group by sub_category,format(order_date,'yyyyMM')
+)
+, prev_month_sales as (select *,lag(sales) over(partition by sub_category order by year_month) as prev_sales
+from sbc_sales)
+select  top 1 * , (sales-prev_sales)/prev_sales as mom_growth
+from prev_month_sales
+where year_month='202001'
+order by mom_growth desc
