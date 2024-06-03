@@ -244,3 +244,27 @@ select  top 1 * , (sales-prev_sales)/prev_sales as mom_growth
 from prev_month_sales
 where year_month='202001'
 order by mom_growth desc
+
+
+
+-- 4) 4- write a query to print top 3 products in each category by year over year sales growth in year 2020.
+
+-- Need to try it again
+
+
+
+
+-- Solution
+with cat_sales as (
+select category,product_id,datepart(year,order_date) as order_year, sum(sales) as sales
+from orders
+group by category,product_id,datepart(year,order_date)
+)
+, prev_year_sales as (select *,lag(sales) over(partition by category,product_id order by order_year) as prev_year_sales
+from cat_sales)
+,rnk as (
+select   * ,rank() over(partition by category order by (sales-prev_year_sales)/prev_year_sales desc) as rn
+from prev_year_sales
+where order_year='2020'
+)
+select * from rnk where rn<=3
