@@ -285,3 +285,65 @@ from prev_year_sales
 where order_year='2020'
 )
 select * from rnk where rn<=3
+
+
+
+-- 5) create below 2 tables 
+
+create table call_start_logs
+(
+phone_number varchar(10),
+start_time datetime
+);
+insert into call_start_logs values
+('PN1','2022-01-01 10:20:00'),('PN1','2022-01-01 16:25:00'),('PN2','2022-01-01 12:30:00')
+,('PN3','2022-01-02 10:00:00'),('PN3','2022-01-02 12:30:00'),('PN3','2022-01-03 09:20:00')
+
+create table call_end_logs
+(
+phone_number varchar(10),
+end_time datetime
+);
+insert into call_end_logs values
+('PN1','2022-01-01 10:45:00'),('PN1','2022-01-01 17:05:00'),('PN2','2022-01-01 12:55:00')
+,('PN3','2022-01-02 10:20:00'),('PN3','2022-01-02 12:50:00'),('PN3','2022-01-03 09:40:00')
+;
+
+-- write a query to get start time and end time of each call from above 2 tables.Also create a column of call duration in minutes.  Please do take into account that
+-- there will be multiple calls from one phone number and each entry in start table has a corresponding entry in end table.
+
+select * from call_start_logs;
+select * from call_end_logs;
+
+-- My solution
+with start_calls AS (
+SELECT *, cast(start_time as time) AS start_time_, cast(start_time as date) AS start_date_,
+RANK() OVER(ORDER BY start_time) as s_rnk
+FROM call_start_logs)
+, end_calls AS (
+SELECT *, cast(end_time as time) AS end_time_, cast(end_time as date) AS end_date_,
+RANK() OVER(ORDER BY end_time) as e_rnk
+FROM call_end_logs )
+SELECT s.phone_number,s.start_time,e.end_time, DATEDIFF(MINUTE,start_time_, end_time_) AS call_duration
+FROM start_calls s 
+INNER JOIN end_calls e 
+ON s.s_rnk = e.e_rnk
+ORDER BY phone_number, start_time
+
+-- Approach logic. 
+/*
+1) I need to separate time and date from both start_time and end_time because we need to create call_duration column.
+2) Then I will use RANK() OVER(ORDER BY start_time) and RANK() OVER(ORDER BY end_time) to give ranks. I used order by time because I want to 
+rank them 1st call to last call. 
+3) based on ranks, I will INNER join both tables because we need to find out call_duration
+4) I save results of both queries in CTE and then use DATEDIFF() to calculate difference in min
+*/
+
+
+
+
+select s.phone_number,s.rn,s.start_time,e.end_time, datediff(minute,start_time,end_time) as duration
+from 
+(select *,row_number() over(partition by phone_number order by start_time) as rn  from call_start_logs) s
+inner join (select *,row_number() over(partition by phone_number order by end_time) as rn  from call_end_logs) e
+on s.phone_number = e.phone_number and s.rn=e.rn;
