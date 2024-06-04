@@ -247,9 +247,26 @@ order by mom_growth desc
 
 
 
--- 4) 4- write a query to print top 3 products in each category by year over year sales growth in year 2020.
+-- 4) 4- write a query to print top 3 products in each category by year over year sales growth in year 2020. (IMP problem)
 
 -- Need to try it again
+
+WITH cat_sales AS (
+SELECT category, product_id, YEAR(order_date) AS o_year, SUM(sales) as sum_sales
+FROM orders 
+GROUP BY category, product_id, YEAR(order_date) )
+, win_func AS (
+SELECT *,
+LAG(sum_sales,1) OVER(PARTITION BY category, product_id ORDER BY o_year desc) as prev_sales
+FROM cat_sales )
+, rnk_func AS (
+SELECT *,
+RANK() OVER(PARTITION BY  category ORDER BY (sum_sales - prev_sales)/prev_sales desc) as rnk
+FROM win_func
+WHERE o_year = '2020' )
+SELECT *
+FROM rnk_func
+WHERE rnk <= 3
 
 
 
