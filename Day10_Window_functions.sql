@@ -347,3 +347,4 @@ from
 (select *,row_number() over(partition by phone_number order by start_time) as rn  from call_start_logs) s
 inner join (select *,row_number() over(partition by phone_number order by end_time) as rn  from call_end_logs) e
 on s.phone_number = e.phone_number and s.rn=e.rn;
+
