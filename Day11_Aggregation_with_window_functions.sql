@@ -134,3 +134,50 @@ select * from (
 select *,rank() over(partition by category order by roll3_sales desc) as rn from yyyy 
 where yo=2020 and mo=1) A
 where rn<=3
+
+
+
+
+-- 2- write a query to find products for which month over month sales has never declined.
+
+
+-- need to solve this again. 
+
+
+
+-- Solution
+with xxx as (select product_id,datepart(year,order_date) as yo,datepart(month,order_date) as mo, sum(sales) as sales
+from orders 
+group by product_id,datepart(year,order_date),datepart(month,order_date))
+,yyyy as (
+select *,lag(sales,1,0) over(partition by product_id order by yo,mo) as prev_sales
+from xxx)
+select COUNT(distinct product_id) from yyyy where product_id not in
+(select product_id from yyyy where sales<prev_sales group by product_id)
+
+
+
+-- 3- write a query to find month wise sales for each category for months where sales is more than the combined sales of previous 2 months for that category.
+
+with cat_sales AS (
+SELECT category, DATEPART(YEAR, order_date) as yy, DATEPART(MONTH, order_date) AS mm, SUM(sales) as total_sales
+FROM orders 
+GROUP BY category,  DATEPART(YEAR, order_date), DATEPART(MONTH, order_date))
+, mon_2_sales AS (
+SELECT *,
+SUM(total_sales) OVER(PARTITION BY category ORDER BY yy,mm ROWS BETWEEN 2 PRECEDING AND 1 PRECEDING) AS month_2_sales
+FROM cat_sales )
+SELECT *
+FROM mon_2_sales
+WHERE total_sales > month_2_sales
+
+
+
+with xxx as (select category,datepart(year,order_date) as yo,datepart(month,order_date) as mo, sum(sales) as sales
+from orders 
+group by category,datepart(year,order_date),datepart(month,order_date))
+,yyyy as (
+select *,sum(sales) over(partition by category order by yo,mo rows between 2 preceding and 1 preceding ) as prev2_sales
+from xxx)
+select * from yyyy where  sales>prev2_sales
+
