@@ -58,3 +58,79 @@ FROM employee;
 SELECT *,
 SUM(salary) OVER(ORDER BY emp_id ROWS BETWEEN 5 FOLLOWING AND 10 FOLLOWING) as rolling_salary_01 -- adding between 5th following and 10th following row. check the o/p
 FROM employee;
+
+
+SELECT *,
+SUM(salary) OVER(PARTITION BY dept_id ORDER BY emp_id ROWS BETWEEN 1 PRECEDING AND 1 following) as rolling_salary_01 -- adding 1st preceding, 1st following row and current row. check the o/p
+FROM employee;
+
+SELECT *,
+SUM(salary) OVER(PARTITION BY dept_id ORDER BY emp_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as rolling_sum_salary
+FROM employee;
+
+SELECT *,
+SUM(salary) OVER(ORDER BY emp_id),
+SUM(salary) OVER(PARTITION BY dept_id ORDER BY emp_id ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as rolling_sum_salary
+FROM employee;
+
+
+-- FIRST_VALUE and LAST_VALUE
+
+SELECT *,
+FIRST_VALUE(salary) OVER(ORDER BY salary) AS first_salary,
+FIRST_VALUE(salary) OVER(ORDER BY salary desc) AS last_salary,
+LAST_VALUE(salary) OVER(ORDER BY salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_salary_as_well,
+LAST_VALUE(salary) OVER(ORDER BY salary ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOwiNG) AS last_salary_also
+FROM employee
+
+
+
+-- I want rolling 3 month sum of sales.
+
+
+with month_wise_sales AS 
+(
+SELECT DATEPART(YEAR, order_date) AS year_order, DATEPART(MONTH, order_date) AS month_order, SUM(sales) AS total_sales
+FROM orders
+GROUP BY DATEPART(YEAR, order_date), DATEPART(MONTH, order_date)
+)
+SELECT *,
+SUM(total_sales) OVER(ORDER BY year_order, month_order ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling_3_sales
+FROM month_wise_sales
+
+
+
+-------------------------------------- Assignmnet
+
+-- 1- write a sql to find top 3 products in each category by highest rolling 3 months total sales for Jan 2020.
+
+WITH month_wise_sales AS (
+SELECT category, product_id, DATEPART(YEAR, order_date) as o_year, DATEPART(MONTH, order_date) as o_month ,SUM(sales) as total_sales
+FROM orders
+WHERE DATEPART(YEAR, order_date) = 2019 OR DATEPART(YEAR, order_date) = 2020
+GROUP BY category, product_id, DATEPART(YEAR, order_date), DATEPART(MONTH, order_date))
+, win_func AS (
+SELECT *,
+SUM(total_sales) OVER(PARTITION BY category, product_id ORDER BY o_year, o_month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) as rolling_3_sales
+FROM month_wise_sales)
+, rnk_table AS (
+SELECT *,
+RANK() OVER(PARTITION BY category ORDER BY rolling_3_sales DESC) as rnk
+FROM win_func
+WHERE o_year = 2020 AND o_month = 1)
+SELECT *
+FROM rnk_table
+WHERE rnk <= 3;
+
+
+
+with xxx as (select category,product_id,datepart(year,order_date) as yo,datepart(month,order_date) as mo, sum(sales) as sales
+from orders 
+group by category,product_id,datepart(year,order_date),datepart(month,order_date))
+,yyyy as (
+select *,sum(sales) over(partition by category,product_id order by yo,mo rows between 2 preceding and current row ) as roll3_sales
+from xxx)
+select * from (
+select *,rank() over(partition by category order by roll3_sales desc) as rn from yyyy 
+where yo=2020 and mo=1) A
+where rn<=3
