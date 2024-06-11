@@ -116,3 +116,41 @@ EXEC spemp 100, @cnt1 OUT
 print @cnt1
 
 
+---------------------- FUNCTIONS --------------------------------------
+
+-- 1) For integers
+
+CREATE FUNCTION fnproduct (@a int, @b int)
+RETURNS INT
+AS
+BEGIN
+return (select @a * @b)
+END
+
+
+
+SELECT [dbo].[fnproduct] (4,5)
+
+
+-- 2) For decimals 
+
+ALTER FUNCTION fnproduct (@a int, @b decimal(5,2))
+RETURNS decimal(5,2)
+AS
+BEGIN
+RETURN (select @a * @b)
+END
+
+SELECT [dbo].[fnproduct] (4,5.4)
+
+
+--- 3) Default values
+
+ALTER FUNCTION fnproduct (@a int, @b int = 200)
+RETURNS decimal(5,2)
+AS
+BEGIN
+RETURN (select @a * @b)
+END
+
+SELECT [dbo].[fnproduct] (4,default)
