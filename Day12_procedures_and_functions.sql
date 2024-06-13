@@ -154,3 +154,7 @@ RETURN (select @a * @b)
 END
 
 SELECT [dbo].[fnproduct] (4,default)
+
+
+
+----- Pivot and Unpivot 
