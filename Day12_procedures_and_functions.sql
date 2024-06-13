@@ -153,8 +153,56 @@ BEGIN
 RETURN (select @a * @b)
 END
 
-SELECT [dbo].[fnproduct] (4,default)
+SELECT [dbo].[fnproduct] (4,default);
 
 
 
 ----- Pivot and Unpivot 
+
+
+-- I want sales of catrgories in year 2020 and 2021 in different columns. 
+
+select * from orders;
+
+
+-- 1) Using CASE WHEN
+
+SELECT category,
+SUM(CASE WHEN DATEPART(YEAR, order_date) = 2020 THEN sales END) as sales_2020,
+SUM(CASE WHEN DATEPART(YEAR, order_date) = 2021 THEN sales END) as sales_2021
+FROM orders 
+GROUP BY category
+
+-- 2) USING PIVOT
+
+SELECT * FROM
+(SELECT category, DATEPART(YEAR, order_date) as yod, sales
+FROM orders) as t1
+PIVOT (
+    SUM(sales) FOR yod in ([2020],[2021])
+) as t2
+
+
+SELECT * FROM
+(SELECT category, DATEPART(MONTH, order_date) as moy, order_date, sales 
+FROM orders) as t1
+PIVOT (
+    SUM(sales) FOR moy IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12])
+) as t2
+WHERE DATEPART(YEAR, order_date) = 2020
+
+
+SELECT * FROM 
+(SELECT category, region, sales
+FROM orders) t1
+PIVOT(
+    SUM(sales) FOR region IN (West, East, South)
+) t2
+
+-- Even though "northeast" is not present, we are getting NULL values but not an error. 
+SELECT * FROM 
+(SELECT category, region, sales
+FROM orders) t1
+PIVOT(
+    SUM(sales) FOR region IN (West, South, East, Northeast)
+) t2
