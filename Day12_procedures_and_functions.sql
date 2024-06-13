@@ -206,3 +206,14 @@ FROM orders) t1
 PIVOT(
     SUM(sales) FOR region IN (West, South, East, Northeast)
 ) t2
+
+
+
+--- Storing a result of a query in a table. 
+
+SELECT * INTO orders_west
+FROM orders 
+WHERE region = 'West'
+
+
+SELECT * FROM orders_west
