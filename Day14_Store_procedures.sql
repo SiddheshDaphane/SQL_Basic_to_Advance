@@ -13,3 +13,28 @@ END
 
 
 EXEC spSalaryStat; --  Executing the created procedure. 
+
+
+
+---- Modifying store procedure. 
+
+GO
+ALTER PROC spSalaryStat
+AS
+BEGIN
+    SELECT dept_id, AVG(salary) AS avg_dept_salary, SUM(salary) AS total_dept_salry
+    FROM employee
+    GROUP BY dept_id
+    ORDER BY avg_dept_salary desc, total_dept_salry desc
+END
+
+
+EXEC spSalaryStat;
+
+
+
+--- Deleting procedure. (You can also delete from sidebar.)
+
+DROP PROC spSalaryStat;
+
+EXEC spSalaryStat;
