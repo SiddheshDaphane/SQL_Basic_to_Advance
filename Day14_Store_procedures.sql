@@ -106,3 +106,24 @@ END
 
 
 EXEC spFilters @age = 40, @salaryNo = 5000, @name = 'S';
+
+
+
+------- NULL as default value ---------
+
+GO 
+ALTER PROC spFilters
+    (
+        @age AS INT = NULL, 
+        @salaryNo AS INT = NULL,
+        @name AS VARCHAR(MAX))
+AS 
+BEGIN
+    SELECT emp_id, emp_name, salary, emp_age
+    FROM employee
+    WHERE (@age IS NULL OR emp_age < @age) AND (@salaryNo IS NULL OR salary > @salaryNo) AND emp_name LIKE '%' + @name + '%'
+END 
+
+
+
+EXEC spFilters @name = 'A';
