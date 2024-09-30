@@ -48,7 +48,7 @@ select * from employee;
 
 USE namasteSQL
 GO
-CREATE PROC spSalary(@salaryNo AS INT)
+CREATE PROC spSalary(@salaryNo AS INT) -- Added parameter and used that parameter in WHERE clause. 
 AS
 BEGIN 
     SELECT emp_id, emp_name, salary, dept_id
@@ -58,3 +58,30 @@ END
 
 
 EXEC spSalary 10000;
+
+
+------------- Store procedure with multiple parameters --------------
+
+GO 
+CREATE PROC spFilters(@age AS INT, @salaryNo AS INT)
+AS 
+BEGIN
+    SELECT emp_name, dept_id, salary, emp_age
+    FROM employee
+    WHERE @salaryNo > 5000 AND @age < 40
+END
+
+
+
+GO 
+ALTER PROC spFilters(@age AS INT, @salaryNo AS INT)
+AS 
+BEGIN
+    SELECT emp_name, dept_id, salary, emp_age
+    FROM employee
+    WHERE salary > @salaryNo AND emp_age < @age
+END
+
+
+
+EXEC spFilters 40, 10000;
