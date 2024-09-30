@@ -85,3 +85,24 @@ END
 
 
 EXEC spFilters 40, 10000;
+
+
+
+----------------- TEXT parameter ------------------
+
+GO
+ALTER PROC spFilters
+    (
+        @age AS INT, 
+        @salaryNo AS INT,
+        @name AS VARCHAR(MAX))
+AS 
+BEGIN
+    SELECT emp_id, emp_name, salary, emp_age
+    FROM employee
+    WHERE emp_age < @age AND salary > @salaryNo AND emp_name LIKE '%' + @name + '%'
+END 
+
+
+
+EXEC spFilters @age = 40, @salaryNo = 5000, @name = 'S';
