@@ -37,4 +37,24 @@ EXEC spSalaryStat;
 
 DROP PROC spSalaryStat;
 
+Go
 EXEC spSalaryStat;
+
+
+
+select * from employee;
+
+----------------- Store procedures Parameters ---------------------
+
+USE namasteSQL
+GO
+CREATE PROC spSalary(@salaryNo AS INT)
+AS
+BEGIN 
+    SELECT emp_id, emp_name, salary, dept_id
+    FROM employee
+    WHERE salary > @salaryNo
+END
+
+
+EXEC spSalary 10000;
