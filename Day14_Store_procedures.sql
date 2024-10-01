@@ -158,3 +158,78 @@ WHERE order_id IN (@OrdID1,@OrdID2)
 ------------------------------------------------ Assiging values to variable from SELECT ---------------------------------------------------
 
 
+select * from employee
+
+Go 
+DECLARE @Sal AS INT 
+DECLARE @Depart AS INT 
+SET @Sal = (SELECT COUNT(*) FROM employee)
+SET @Depart = (SELECT COUNT(DISTINCT dept_id) FROM employee)
+
+SELECT 'Number of employees' , @Sal
+UNION ALL 
+SELECT 'Number of Departments', @Depart
+
+
+------------------------------ Print the values of the varibales in "message" ----------------------------------
+PRINT  @Sal
+PRINT @Depart
+
+
+Print 'Number of Employees are = ' + CAST(@Sal AS VARCHAR(MAX))
+Print 'Number of Departments are = ' + CAST(@Depart AS VARCHAR(MAX))
+
+
+
+
+-------------------------------- Printing many values in a single varibale ----------------------------------
+
+
+select * from employee
+
+
+Go 
+DECLARE @emp_name AS VARCHAR(MAX)
+SET @emp_name = ''
+
+SELECT @emp_name = @emp_name + emp_name + ', '
+FROM employee
+WHERE emp_age < 40
+
+
+print 'Names of the employees are [' + @emp_name + ']'
+
+
+--------------- Printing on different line
+
+Go 
+DECLARE @emp_name AS VARCHAR(MAX)
+SET @emp_name = ''
+
+SELECT @emp_name = @emp_name + emp_name + CHAR(10)
+FROM employee
+WHERE emp_age < 40
+
+
+print 'Names of the employees are ' + @emp_name
+
+
+
+
+Go 
+DECLARE @emp_name AS VARCHAR(MAX)
+SET @emp_name = ''
+
+SELECT @emp_name = @emp_name + emp_name + CHAR(10) + CHAR(13)
+FROM employee
+WHERE emp_age < 40
+
+
+print 'Names of the employees are '+ CHAR(10) + CHAR(13) + @emp_name
+
+
+
+
+----------------- Some Global variables ----------------------
+
+SELECT @@SERVERNAME, @@VERSION, @@FETCH_STATUS   -- and many more.
