@@ -127,3 +127,34 @@ END
 
 
 EXEC spFilters @name = 'A';
+
+
+
+-------------------------------------------- VARIABLE ---------------------------------------------
+
+select * from order_east
+select * from order_west
+
+
+Go 
+
+DECLARE @OrdID1 AS INT
+DECLARE @OrdID2 AS INT
+SET @OrdID1 = 4
+SET @OrdID2 = 3
+
+SELECT order_id, region, sales
+FROM order_east
+WHERE order_id IN (@OrdID1, @OrdID2)
+
+UNION ALL 
+
+SELECT order_id, region, sales
+FROM order_west
+WHERE order_id IN (@OrdID1,@OrdID2)
+
+
+
+------------------------------------------------ Assiging values to variable from SELECT ---------------------------------------------------
+
+
