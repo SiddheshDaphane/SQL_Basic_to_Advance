@@ -278,6 +278,53 @@ SELECT @CustomerCounts AS [Customer Counts], @CustomerNames AS [Customer Names]
 
 -- Lets see if we can get count of unique customers using select statement. 
 
+GO 
+ALTER PROC spCutInfo 
+            (
+                @prof AS INT,
+                @CusName AS VARCHAR(MAX) OUTPUT,
+                @CusCnt AS INT OUTPUT
+            )
+AS 
+BEGIN
+    DECLARE @NamesOfCustomers AS VARCHAR(MAX)
+    SET @NamesOfCustomers = ''
+    SELECT @NamesOfCustomers = @NamesOfCustomers + customer_name + ', '
+    FROM orders
+    WHERE profit > @prof
+    ORDER BY customer_name
+
+    SET @CusCnt = (SELECT COUNT(DISTINCT customer_name) FROM orders WHERE profit > @prof)
+    SET @CusName = @NamesOfCustomers
+END
+
+DECLARE @CountOfCust AS INT 
+DECLARE @CustomerNames AS VARCHAR(MAX)
+
+EXEC spCutInfo @prof = 50,
+     @CusCnt = @CountOfCust OUTPUT,
+     @CusName = @CustomerNames OUTPUT
+
+SELECT @CountOfCust AS [Count of Unique Customers], @CustomerNames AS [Customer Names]
+  -- Now, How do we knwo that "Customer Names" are also unique, let's cross check this. 
+
+DECLARE @SplitCusCnt AS INT
+SELECT @SplitCusCnt = COUNT(*)
+FROM string_split(@CustomerNames, ',')
+
+SELECT 
+    @CountOfCust AS [Unique Customer Count],
+    @SplitCusCnt AS [Split Customer Name Count],
+    CASE WHEN @CountOfCust = @SplitCusCnt THEN 'Match' ELSE 'Mismatch' END AS [Verification];
+
+-- Result showed us that it is a mismatch which means we have count of unique customers but we don't have unique customers names
+-- Now how to solve this problem? 
+
+
+
+
+
+---- Unique customer counts and also unique customer names solution. (VIMP)
 Go 
 
 ALTER PROC spCusInfo
@@ -308,7 +355,7 @@ EXEC spCusInfo @prof = 50,
         @CusName = @Name OUTPUT,
         @CusCnt = @Cnt OUTPUT
 
--- SELECT @Cnt AS [Unique Customer Count], @Name AS [Customer Names]
+SELECT @Cnt AS [Unique Customer Count], @Name AS [Customer Names]
 
 DECLARE @SplitCusCnt AS INT
 SELECT @SplitCusCnt = COUNT(*)
