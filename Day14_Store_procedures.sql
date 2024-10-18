@@ -419,12 +419,12 @@ ELSE
 IF @CountOfCustOfCali > @CountOfCustOfTexas
     BEGIN
         PRINT 'Warning!!'
-        PRINT 'There are more customer from California than Texas'
+        PRINT '     There are more customer from California than Texas'
     END
 ELSE
     BEGIN
         PRINT 'Information'
-        PRINT 'There are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX)) + ' customers in California and there are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX)) + ' in Texas'
+        PRINT '     There are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX)) + ' customers in California and there are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX)) + ' in Texas'
     END
 
 
@@ -432,11 +432,92 @@ ELSE
 IF @CountOfCustOfCali < @CountOfCustOfTexas
     BEGIN
         PRINT 'Warning!!'
-        PRINT 'There are more customer from California than Texas'
+        PRINT '     There are more customer from California than Texas'
     END
 ELSE
     BEGIN
         PRINT 'Information'
-        PRINT 'There are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX)) + ' customers in California and there are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX)) + ' in Texas'
+        PRINT '     There are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX)) + ' customers in California and there are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX)) + ' in Texas'
     END
 
+----------------------------------- NESTED IF statements -------------------------------------
+
+
+IF @CountOfCustOfCali > @CountOfCustOfTexas
+    BEGIN
+        PRINT 'Warning!!'
+        PRINT '     There are more customer from California than Texas'
+        IF @CountOfCustOfTexas > 500
+            BEGIN
+                PRINT '             There are atleast more than 500 customers from Texas'
+            END
+    END
+ELSE
+    BEGIN
+        PRINT 'Information'
+        PRINT '     There are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX)) + ' customers in California and there are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX)) + ' in Texas'
+    END
+
+
+
+
+
+IF @CountOfCustOfCali < @CountOfCustOfTexas
+    BEGIN
+        PRINT 'Warning!!'
+        PRINT '     There are more customer from California than Texas'
+        IF @CountOfCustOfTexas > 500
+            BEGIN
+                PRINT '             There are atleast more than 500 customers from Texas'
+            END
+    END
+ELSE
+    BEGIN
+        PRINT 'Information'
+        PRINT '     There are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX)) + ' customers in California and there are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX)) + ' in Texas'
+        IF @CountOfCustOfCali > 500 AND @CountOfCustOfTexas > 500
+            BEGIN
+                PRINT '             There are more than 500 customers from California and Texas'
+            END
+    END
+
+
+------------------------------------------- Using SELECT statement in an IF statement -----------------------------------------------------
+select DISTINCT(ship_mode) from orders
+
+GO
+ALTER PROC spInfo
+            (
+                @mode AS VARCHAR(MAX) --- This can be 'First Class','Same Day','Standard Class','Second Class'
+            )
+AS 
+BEGIN
+    IF @mode = 'First Class'
+    BEGIN
+        (SELECT * FROM orders WHERE ship_mode = 'First Class')
+        RETURN 
+    END
+
+    IF @mode = 'Same Day'
+    BEGIN
+        (SELECT DISTINCT customer_name, customer_id FROM orders WHERE ship_mode = 'Same Day')
+        RETURN
+    END
+
+    IF @mode = 'Standard Class'
+    BEGIN
+        (SELECT DISTINCT customer_name, customer_id FROM orders WHERE ship_mode = 'Standard Class')
+        RETURN
+    END
+
+    IF @mode = 'Second Class'
+    BEGIN
+        (SELECT DISTINCT customer_name, customer_id FROM orders WHERE ship_mode = 'Second Class')
+        RETURN
+    END
+
+    SELECT 'You have to choose between First Class, Same Day, Standard Class, Second Class'
+END
+
+
+EXEC spInfo @mode = 'ALL'
