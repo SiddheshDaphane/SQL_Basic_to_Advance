@@ -393,3 +393,50 @@ DECLARE @CustomerCount AS INT
 EXEC @CustomerCount = SpProfitCalculator @Prof = 1000
 
 SELECT @CustomerCount AS [Customer Count]
+
+
+------------------------------------------- IF statement in SQL -------------------------------------------------
+
+select * from orders
+
+DECLARE @CountOfCustOfCali AS INT 
+DECLARE @CountOfCustOfTexas AS INT 
+SET @CountOfCustOfCali = (SELECT COUNT(*) FROM orders WHERE state = 'California')
+SET @CountOfCustOfTexas = (SELECT COUNT(*) FROM orders WHERE state = 'Texas')
+
+IF @CountOfCustOfCali > 0
+    PRINT 'There are customers from California and count of them are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX))
+IF @CountOfCustOfTexas > 0
+    PRINT 'There are customers from Texas and count of them are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX))
+
+IF @CountOfCustOfCali > @CountOfCustOfTexas
+    PRINT 'There are more customer from California than Texas'
+ELSE
+    PRINT 'There are more customer from Texas than California'
+
+------------------------------------- Using BEGIN and END Blocks ----------------------------------------------
+
+IF @CountOfCustOfCali > @CountOfCustOfTexas
+    BEGIN
+        PRINT 'Warning!!'
+        PRINT 'There are more customer from California than Texas'
+    END
+ELSE
+    BEGIN
+        PRINT 'Information'
+        PRINT 'There are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX)) + ' customers in California and there are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX)) + ' in Texas'
+    END
+
+
+
+IF @CountOfCustOfCali < @CountOfCustOfTexas
+    BEGIN
+        PRINT 'Warning!!'
+        PRINT 'There are more customer from California than Texas'
+    END
+ELSE
+    BEGIN
+        PRINT 'Information'
+        PRINT 'There are ' + CAST(@CountOfCustOfCali AS VARCHAR(MAX)) + ' customers in California and there are ' + CAST(@CountOfCustOfTexas AS VARCHAR(MAX)) + ' in Texas'
+    END
+
