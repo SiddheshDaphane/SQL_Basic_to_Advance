@@ -243,6 +243,8 @@ USE namasteSQL
 GO
 
 select * from orders
+
+-- Here I am using global variable to get count of customers.
 GO
 CREATE PROC spCustInfo
         (
@@ -272,3 +274,47 @@ EXEC spCustInfo @Prof = 50,
      @CusName = @CustomerNames OUTPUT
 
 SELECT @CustomerCounts AS [Customer Counts], @CustomerNames AS [Customer Names]
+
+
+-- Lets see if we can get count of unique customers using select statement. 
+
+Go 
+
+ALTER PROC spCusInfo
+        (
+            @prof AS INT,
+            @CusName AS VARCHAR(MAX) OUTPUT,
+            @CusCnt AS INT OUTPUT
+        )
+AS 
+BEGIN
+
+    DECLARE @Names AS VARCHAR(MAX)
+    SET @Names = ''
+    SELECT @Names = STRING_AGG(CAST(customer_name AS VARCHAR(MAX)), ', ') WITHIN GROUP (ORDER BY customer_name)
+    FROM (SELECT DISTINCT customer_name
+          FROM orders
+          WHERE profit > @prof  ) AS UniqueCustomers
+    
+
+    SET @CusCnt = (SELECT COUNT(DISTINCT customer_name) FROM orders WHERE profit > @prof)
+    SET @CusName = @Names
+END
+
+DECLARE @Name AS VARCHAR(MAX)
+DECLARE @Cnt AS INT
+
+EXEC spCusInfo @prof = 50,
+        @CusName = @Name OUTPUT,
+        @CusCnt = @Cnt OUTPUT
+
+-- SELECT @Cnt AS [Unique Customer Count], @Name AS [Customer Names]
+
+DECLARE @SplitCusCnt AS INT
+SELECT @SplitCusCnt = COUNT(*)
+FROM string_split(@Name, ',')
+
+SELECT 
+    @Cnt AS [Unique Customer Count],
+    @SplitCusCnt AS [Split Customer Name Count],
+    CASE WHEN @Cnt = @SplitCusCnt THEN 'Match' ELSE 'Mismatch' END AS [Verification];
