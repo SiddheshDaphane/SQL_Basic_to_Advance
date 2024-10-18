@@ -365,3 +365,31 @@ SELECT
     @Cnt AS [Unique Customer Count],
     @SplitCusCnt AS [Split Customer Name Count],
     CASE WHEN @Cnt = @SplitCusCnt THEN 'Match' ELSE 'Mismatch' END AS [Verification];
+
+
+
+
+
+
+---------------- Adding Return Value in SP. There can be only 1 return value in SP and it must be integer ------------------
+
+
+GO
+
+CREATE PROC SpProfitCalculator(@Prof AS INT)
+AS 
+BEGIN
+    SELECT customer_name
+    FROM orders
+    WHERE profit > @Prof
+    ORDER BY customer_name
+
+    RETURN @@ROWCOUNT
+END
+
+
+DECLARE @CustomerCount AS INT 
+
+EXEC @CustomerCount = SpProfitCalculator @Prof = 1000
+
+SELECT @CustomerCount AS [Customer Count]
