@@ -130,10 +130,10 @@ EXEC spFilters @name = 'A';
 
 
 
--------------------------------------------- VARIABLE ---------------------------------------------
+-------------------------------------------- VARIABLE --------------------------------------------- 
 
 select * from order_east
-select * from order_west
+select * from order_west 
 
 
 Go 
@@ -233,3 +233,42 @@ print 'Names of the employees are '+ CHAR(10) + CHAR(13) + @emp_name
 ----------------- Some Global variables ----------------------
 
 SELECT @@SERVERNAME, @@VERSION, @@FETCH_STATUS   -- and many more.
+
+
+
+
+--------------------------------------------- OUTPUT parameters and Return Values -------------------------------------------------------------
+
+USE namasteSQL
+GO
+
+select * from orders
+GO
+CREATE PROC spCustInfo
+        (
+            @Prof AS INT,
+            @CusName AS VARCHAR(MAX) OUTPUT,
+            @CusCnt AS INT OUTPUT
+        )
+AS 
+BEGIN
+    DECLARE @Names AS VARCHAR(MAX)
+    SET @Names = ''
+    SELECT @Names = @Names + customer_name + ', '
+    FROM orders 
+    WHERE profit > @Prof 
+    ORDER BY customer_name
+
+    SET @CusCnt = @@ROWCOUNT -- Number of customers using global variable
+    SET @CusName = @Names
+END
+
+
+DECLARE @CustomerNames AS VARCHAR(MAX)
+DECLARE @CustomerCounts AS INT
+
+EXEC spCustInfo @Prof = 50,
+     @CusCnt = @CustomerCounts OUTPUT,
+     @CusName = @CustomerNames OUTPUT
+
+SELECT @CustomerCounts AS [Customer Counts], @CustomerNames AS [Customer Names]
