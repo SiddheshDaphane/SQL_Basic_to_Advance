@@ -30,3 +30,32 @@ END
 GO
 SELECT customer_id, order_date, dbo.fnLongDate(order_date) AS Long_Date -------- USE schema name before function name. 
 FROM orders
+
+
+------------------------------------------- Modifying function using ALTER key word -----------------------------------
+
+
+GO
+
+ALTER FUNCTION fnLongDate
+        (
+            @FullDate AS DATETIME
+        )
+RETURNS VARCHAR(MAX)
+AS
+BEGIN
+    RETURN DATENAME(DW, @FullDate) + ' ' +
+    DATENAME(D, @FullDate) +
+    CASE
+        WHEN DAY(@FullDate) IN (1,21,31) THEN 'st'
+        WHEN DAY(@FullDate) IN (2,22) THEN 'nd'
+        WHEN DAY(@FullDate) IN (3,23) THEN 'rd'
+        ELSE 'th'
+    END + ' ' +
+    DATENAME(M, @FullDate) + ' ' +
+    DATENAME(YY, @FullDate)
+END
+
+GO
+SELECT customer_id, order_date, dbo.fnLongDate(order_date) AS Long_Date -------- USE schema name before function name. 
+FROM orders
