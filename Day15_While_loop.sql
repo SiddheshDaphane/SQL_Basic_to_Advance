@@ -49,7 +49,7 @@ WHILE @CountQunatity < 5
 
             SET @CusCnt = (SELECT COUNT(DISTINCT customer_name)FROM orders WHERE quantity = @CountQunatity)
             
-            PRINT 'Qunatity is ' + CAST(@CountQunatity AS VARCHAR(2)) + ' Count of Customers of this quantity is ' + CAST(@CusCnt AS VARCHAR(5)) + CHAR(10) + CHAR(13) 
+            PRINT 'Qunatity is ' + CAST(@CountQunatity AS VARCHAR(MAX)) + ' Count of Customers of this quantity is ' + CAST(@CusCnt AS VARCHAR(MAX)) + CHAR(10) + CHAR(13) 
                     + ' [' + @CusName +'   ]' + CHAR(10) + CHAR(13) 
             SET @CountQunatity = @CountQunatity + 1
         END
