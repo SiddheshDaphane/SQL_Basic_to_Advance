@@ -10,7 +10,8 @@ SELECT customer_id, order_date,
 FROM orders
 
 
--------------------- Creating a new function -----------------------
+-------------------- Creating a new scalar function -----------------------
+-- scalar function means it returns only 1 value of any data time. 
 GO
 
 CREATE FUNCTION fnLongDate
