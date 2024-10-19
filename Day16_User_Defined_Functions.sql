@@ -59,3 +59,10 @@ END
 GO
 SELECT customer_id, order_date, dbo.fnLongDate(order_date) AS Long_Date -------- USE schema name before function name. 
 FROM orders
+
+
+
+
+select * from orders
+
+-- We can create complex functions also according to our need. 
