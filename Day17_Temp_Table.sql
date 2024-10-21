@@ -29,3 +29,25 @@ WHERE customer_name LIKE 'Claire%';
 
 SELECT * FROM #TempCusTable;
 
+
+
+
+
+----------------------------- TABLE variable ----------------------------------------
+
+-- TABLE variable life is only till query is executing which means you can add WHERE clause or other clause after creating table varibale
+-- and then run it again, it will not give you any error. This is a big advantage of TABLE variable. 
+
+
+
+DECLARE @TempPeople AS TABLE
+(
+    order_id VARCHAR(MAX),
+    customer_name VARCHAR(MAX)
+)
+INSERT INTO @TempPeople
+SELECT order_id, customer_name
+FROM orders
+
+
+SELECT * FROM @TempPeople
