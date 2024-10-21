@@ -1,5 +1,9 @@
 ------------- Method 1 (Creating a TEMP table)
 
+-- Temp tables are local meaning if I close this query window, they will drop and I have to create again. We can have global Temp table by using
+-- '##' instead of '#'. 
+
+
 select * from orders
 
 
@@ -24,3 +28,4 @@ FROM orders
 WHERE customer_name LIKE 'Claire%';
 
 SELECT * FROM #TempCusTable;
+
