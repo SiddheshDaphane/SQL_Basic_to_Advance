@@ -94,7 +94,19 @@ BEGIN TRAN tran1
 COMMIT TRAN tran1
 
 
+-------------------------------------------- Transaction savepoints --------------------------------------------------
 
+
+BEGIN TRAN tran1
+    PRINT @@TRANCOUNT
+    SAVE TRAN savepoint
+        PRINT @@TRANCOUNT
+    ROLLBACK TRAN savepoint    
+    PRINT @@TRANCOUNT
+COMMIT TRAN tran1
+
+
+------------------------------------------- Transactions in store procedure ---------------------------------------------
 
 
 
