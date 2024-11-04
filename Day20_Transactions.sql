@@ -57,7 +57,7 @@ BEGIN TRY
     INSERT INTO items VALUES ('Oppenhiemer','2023-14-02',234254)
 
     UPDATE items
-    SET order_date = 2023-14-02
+    SET order_date = '2025-14-02'
     WHERE sub_category = 'Oppenhiemer'
 
     COMMIT TRAN Opp
