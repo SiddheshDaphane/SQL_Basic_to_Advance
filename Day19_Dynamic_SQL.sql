@@ -26,7 +26,7 @@ EXEC sp_executesql @SQLString
 
 
 
--------------------- Creating a store procedure
+-------------------- Creating a store procedure ---------------------------
 GO
 
 CREATE PROC spVariableTable 
@@ -46,3 +46,43 @@ END
 EXEC spVariableTable 'orders';
 EXEC spVariableTable 'employee';
 EXEC spVariableTable 'dept';
+
+
+--------- Multiple parameters
+
+GO
+
+ALTER PROC spVariableTable 
+(
+    @TableName NVARCHAR(128),
+    @Number INT
+)
+AS
+BEGIN
+    DECLARE @SQLString NVARCHAR(MAX)
+    DECLARE @NumberString NVARCHAR(4)
+
+    SET @NumberString = CAST(@Number AS NVARCHAR(4))
+
+    SET @SQLString = N'SELECT TOP ' + @NumberString + '* FROM ' + @TableName
+
+    EXEC sp_executesql @SQLString
+END
+
+
+EXEC spVariableTable 'orders',10; 
+EXEC spVariableTable 'employee',3; 
+
+
+
+--------------- Parameters of sp_executesql -------------------------
+select * from orders
+
+GO
+EXEC sp_executesql
+    N'SELECT customer_name,sales,discount,product_name  
+    FROM orders
+    WHERE discount < @disValeu AND
+    sales > @salesValue',
+    N'@disValeu INT, @salesValue INT',
+    @disValeu = 10, @salesValue = 20
