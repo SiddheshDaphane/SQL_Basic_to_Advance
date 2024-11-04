@@ -22,3 +22,27 @@ select * from items
 
 ROLLBACK TRAN interstellar
 select * from items
+
+
+---------------------------- Conditionally commiting or rolling back-------------------------------
+GO 
+select * from items
+
+DECLARE @Interstellar INT 
+
+BEGIN TRAN interstellar 
+INSERT INTO items VALUES ('Interstellar','2017-04-11','17680')
+
+SELECT @Interstellar = COUNT(*) FROM items WHERE sub_category = 'Interstellar'
+
+IF @Interstellar > 1
+    BEGIN
+        ROLLBACK TRAN interstellar
+        PRINT 'Interstellar was already here'
+    END
+ELSE
+    BEGIN 
+        COMMIT TRAN interstellar
+        PRINT 'Interstellar was added to the database'
+    END
+
