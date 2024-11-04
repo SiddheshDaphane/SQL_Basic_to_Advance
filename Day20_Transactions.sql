@@ -46,3 +46,31 @@ ELSE
         PRINT 'Interstellar was added to the database'
     END
 
+
+--------------------------------------------- Using Error Handling --------------------------------------------------
+select * from items
+GO
+
+BEGIN TRY
+    BEGIN TRAN Opp
+
+    INSERT INTO items VALUES ('Oppenhiemer','2023-14-02',234254)
+
+    UPDATE items
+    SET order_date = 2023-14-02
+    WHERE sub_category = 'Oppenhiemer'
+
+    COMMIT TRAN Opp
+END TRY 
+BEGIN CATCH
+    ROLLBACK TRAN Opp
+    PRINT 'Adding Oppenhiemer failed - Check data types'
+END CATCH
+
+SELECT * FROM items
+
+
+
+
+
+
