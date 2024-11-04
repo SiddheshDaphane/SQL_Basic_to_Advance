@@ -71,6 +71,30 @@ SELECT * FROM items
 
 
 
+--------------------------------------------- Nested transactions basic ----------------------------------------
+
+BEGIN TRAN tran1
+    PRINT @@TRANCOUNT
+    BEGIN TRAN tran2
+        PRINT @@TRANCOUNT
+    COMMIT TRAN tran2    
+    PRINT @@TRANCOUNT
+COMMIT TRAN tran1
+
+
+------------------------------------------- ROLLING BACK NESTED transactions ----------------------------------------
+-- You should be very careful when doing ROLLBACK in nested transactions because it rollbacks everything 
+
+BEGIN TRAN tran1
+    PRINT @@TRANCOUNT
+    BEGIN TRAN 
+        PRINT @@TRANCOUNT
+    ROLLBACK TRAN     
+    PRINT @@TRANCOUNT -- Here count is 0 because everything rolledback
+COMMIT TRAN tran1
+
+
+
 
 
 
