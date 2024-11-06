@@ -40,3 +40,19 @@ DROP TABLE t1
 
 
 -------------------------------------- Deleting a trigger ---------------------------------------------
+
+DROP TRIGGER trgNoNewTables ON DATABASE
+
+
+-------------------------------------- Diasbling and Enabling Trigger ------------------------------------------
+GO
+DISABLE TRIGGER trgNoNewTables ON DATABASE
+
+GO
+ENABLE TRIGGER trgNoNewTables ON DATABASE
+
+GO
+DISABLE TRIGGER ALL ON DATABASE
+
+GO
+ENABLE TRIGGER ALL ON DATABASE
