@@ -56,3 +56,37 @@ DISABLE TRIGGER ALL ON DATABASE
 
 GO
 ENABLE TRIGGER ALL ON DATABASE
+
+
+
+---------------------------------------- Scoped Triggers --------------------------------------
+GO
+
+CREATE TRIGGER trgNoNewTables
+ON ALL SERVER
+FOR CREATE_TABLE
+AS
+BEGIN
+    PRINT 'No new tables'
+    ROLLBACK
+END
+
+
+DROP TRIGGER trgNoNewTables ON ALL SERVER
+
+
+GO
+DISABLE TRIGGER trgNoNewTables ON ALL SERVER
+
+GO
+ENABLE TRIGGER trgNoNewTables ON ALL SERVER
+
+GO
+DISABLE TRIGGER ALL ON ALL SERVER
+
+GO
+ENABLE TRIGGER ALL ON ALL SERVER
+
+
+
+
