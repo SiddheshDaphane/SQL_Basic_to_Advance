@@ -70,3 +70,25 @@ WHERE id = 4
 ----------------------------------- Deleting triggers ----------------------------------------
 
 DROP TRIGGER trgColor
+
+
+
+----------------------------------- Creating a INSTEAD OF triggers --------------------------------------
+
+USE namasteSQL
+GO
+CREATE TRIGGER trgcolor1
+ON colors
+INSTEAD OF INSERT
+AS
+BEGIN
+    RAISERROR('No more colors can be inserted',16,1)
+END
+GO
+
+
+-- Inserting into a table
+INSERT INTO colors VALUES(4, 'Black')
+
+GO
+SELECT * FROM colors WHERE id = 4 
