@@ -131,3 +131,41 @@ GO
 
 DELETE FROM colors
 WHERE id = 4
+
+
+
+------------------------------------------ Validating data using triggers ------------------------------------------------
+
+
+USE namasteSQL
+GO
+
+ALTER TRIGGER trgcoloradded
+ON colors
+AFTER INSERT
+AS
+BEGIN
+
+    IF EXISTS(
+        SELECT * 
+        FROM colors c 
+        INNER JOIN inserted i 
+        ON c.id = i.id
+        WHERE c.color = i.color 
+    )
+    BEGIN
+        RAISERROR('Sorry that color already exist',16,1)
+        ROLLBACK TRANSACTION
+        RETURN
+    END
+
+END
+GO
+
+select * from colors;
+
+-- Inserting into a table
+INSERT INTO colors VALUES(4, 'Black') -- This will raise an error from trigger "trgcoloradded" 
+
+-- Inserting into a table
+INSERT INTO colors VALUES(12, 'asv')
