@@ -88,5 +88,72 @@ GO
 ENABLE TRIGGER ALL ON ALL SERVER
 
 
+------------------------------------------------- Set Trigger Order -------------------------------------------------------
+USE namasteSQL
+GO
+
+DISABLE TRIGGER trgNoNewTables ON ALL SERVER
+
+GO 
+CREATE TRIGGER trgSecondTrigger ON DATABASE
+FOR CREATE_TABLE AS
+    PRINT 'This is Second Trigger'
+
+GO
+CREATE TRIGGER trgFirstTrigger ON DATABASE
+FOR CREATE_TABLE AS
+    PRINT 'This is First Trigger'
+
+GO
+CREATE TABLE test(ID int)
+
+------- In the output right now, we don't know which trigger will give output first and that's why we need to set an order of triggers. 
 
 
+USE namasteSQL
+GO
+
+EXEC sp_settriggerorder
+    @triggername = 'trgFirstTrigger',
+    @order = 'first',
+    @stmttype = 'CREATE_TABLE',
+    @namespace = 'DATABASE'
+
+
+DROP TABLE test
+
+CREATE TABLE test(ID int) -- Now we know that First trigger will execute first and then Second trigger because of @order. 
+
+
+
+USE namasteSQL
+GO
+
+EXEC sp_settriggerorder
+    @triggername = 'trgFirstTrigger',
+    @order = 'last',
+    @stmttype = 'CREATE_TABLE',
+    @namespace = 'DATABASE'
+
+
+
+DROP TABLE test
+
+CREATE TABLE test(ID int) -- Now we know that First trigger will execute last and then Second trigger because of @order. 
+
+
+
+
+
+USE namasteSQL
+GO
+
+EXEC sp_settriggerorder
+    @triggername = 'trgFirstTrigger',
+    @order = 'none',
+    @stmttype = 'CREATE_TABLE',
+    @namespace = 'DATABASE'
+
+
+DROP TABLE test
+CREATE TABLE test(ID int) -- Now we don't know what is the order because of @order='none'
