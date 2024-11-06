@@ -92,3 +92,42 @@ INSERT INTO colors VALUES(4, 'Black')
 
 GO
 SELECT * FROM colors WHERE id = 4 
+
+
+
+--------------------------------- Inserted and Deleted Tables ----------------------------
+
+USE namasteSQL
+GO
+ALTER TRIGGER trgcolor1
+ON colors
+AFTER INSERT
+AS
+BEGIN
+    SELECT * FROM inserted
+END
+
+
+GO
+-- Inserting into a table
+INSERT INTO colors VALUES(4, 'Black') --- Even though I didn't select anything, table appeared in the output. This is system table more specifically "inserted" tabel
+
+
+
+USE namasteSQL
+GO
+ALTER TRIGGER trgcolor1
+ON colors
+AFTER DELETE
+AS
+BEGIN
+    SELECT * FROM inserted
+END
+
+select * from colors
+
+GO
+-- Deleting a record from a table 
+
+DELETE FROM colors
+WHERE id = 4
