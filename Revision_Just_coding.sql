@@ -186,3 +186,6 @@ WHERE quantity > 13
 print 'Names of Customers are ' +CHAR(13) + @name
 
 
+
+-------------------------- Aggreagation with window functions -----------------------
+
