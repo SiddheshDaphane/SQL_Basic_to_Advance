@@ -213,3 +213,22 @@ SUM(salary) OVER(PARTITION BY dept_id ORDER BY emp_id) AS cumsum,
 SUM(salary) OVER(ORDER BY dept_id) AS dept_cumsum,
 SUM(salary) OVER(ORDER BY emp_id) AS emp_cumsum
 FROM employee
+
+
+----------------------------- PRECEDING and CURRENT ROW --------------------------------
+
+SELECT emp_id, dept_id, salary,
+SUM(salary) OVER(ORDER BY emp_id ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) AS rolling_salary
+FROM employee
+
+SELECT emp_id, dept_id, salary,
+SUM(salary) OVER(PARTITION BY dept_id ORDER BY emp_id ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS rolling_salary
+FROM employee
+
+SELECT emp_id, dept_id, salary,
+SUM(salary) OVER(PARTITION BY dept_id ORDER BY emp_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS rolling_sum_salary
+FROM employee
+
+SELECT emp_id, dept_id, salary,
+SUM(salary) OVER(ORDER BY emp_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS rolling_sum_salary
+FROM employee
