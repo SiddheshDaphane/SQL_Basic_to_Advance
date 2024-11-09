@@ -232,3 +232,16 @@ FROM employee
 SELECT emp_id, dept_id, salary,
 SUM(salary) OVER(ORDER BY emp_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS rolling_sum_salary
 FROM employee
+
+-------------------------- FIRST VALUE and LAST VALUE ----------------------------
+
+SELECT emp_id, dept_id, salary,
+FIRST_VALUE(salary) OVER(ORDER BY salary) AS first_value,
+LAST_VALUE(salary) OVER(ORDER BY salary) AS last_value
+FROM employee 
+
+
+SELECT emp_id, dept_id, salary,
+FIRST_VALUE(salary) OVER(ORDER BY salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS first_value,
+LAST_VALUE(salary) OVER(ORDER BY salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_value
+FROM employee 
