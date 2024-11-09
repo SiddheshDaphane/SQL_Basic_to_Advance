@@ -189,3 +189,27 @@ print 'Names of Customers are ' +CHAR(13) + @name
 
 -------------------------- Aggreagation with window functions -----------------------
 
+select * from employee;
+
+
+SELECT emp_id, emp_age, dept_id, salary,
+SUM(salary) OVER(PARTITION BY dept_id) AS without_order_by,
+SUM(salary) OVER(PARTITION BY dept_id ORDER BY emp_id) AS with_order_by,
+SUM(salary) OVER(ORDER BY emp_id) AS only_order_by
+FROM employee
+
+
+
+SELECT emp_id, dept_id, salary,
+AVG(salary) OVER(PARTITION BY dept_id) AS without_order_by,
+AVG(salary) OVER(PARTITION BY dept_id ORDER BY emp_id) AS with_order_by,
+AVG(salary) OVER(ORDER BY emp_id) AS only_order_by
+FROM employee
+
+
+SELECT emp_id, dept_id, salary, 
+SUM(salary) OVER(PARTITION BY dept_id) AS sum,
+SUM(salary) OVER(PARTITION BY dept_id ORDER BY emp_id) AS cumsum,
+SUM(salary) OVER(ORDER BY dept_id) AS dept_cumsum,
+SUM(salary) OVER(ORDER BY emp_id) AS emp_cumsum
+FROM employee
