@@ -245,3 +245,25 @@ SELECT emp_id, dept_id, salary,
 FIRST_VALUE(salary) OVER(ORDER BY salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS first_value,
 LAST_VALUE(salary) OVER(ORDER BY salary ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_value
 FROM employee 
+
+
+select * from orders;
+--- print top 5 selling product from each category by sell
+
+with cet1 AS (
+SELECT category, product_id, SUM(sales) AS t_sales
+FROM orders
+GROUP BY category, product_id )
+, cte2 AS (
+SELECT category, product_id, t_sales,
+RANK() OVER(PARTITION BY category ORDER BY t_sales desc) AS rn
+FROM cet1 )
+SELECT *
+FROM cte2 
+WHERE rn <= 5
+
+
+-- 1- write a query to print 3rd highest salaried employee details for each department (give preferece to younger employee in case of a tie). 
+-- In case a department has less than 3 employees then print the details of highest salaried employee in that department.
+
+select * from employee
