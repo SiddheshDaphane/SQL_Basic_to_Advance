@@ -233,6 +233,7 @@ order by mom_growth
 
 
 -- solution
+
 with sbc_sales as (
 select sub_category,format(order_date,'yyyyMM') as year_month, sum(sales) as sales
 from orders
